@@ -4,8 +4,8 @@
 <br/>
 Johann Carl Friedrich Gauss  (30 April 1777 – 23 February 1855)
 was a German mathematician and physicist who made significant
-contributions to many fields in mathematics and science. (from
-[wikipedia](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss).
+contributions to many fields in mathematics and science 
+(taken from <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">wikipedia</a>.)
 
 The gauss discord bot is designed to help with mathematical
 inquiries of all sorts. He will help you to solve integrals and 
@@ -60,5 +60,25 @@ if __name__ == '__main__':
     client.run(TOKEN)
 ```
 
+## Documentation
+
+All funtions and modules are documented in the code directly. In the
+near future I will set up sphinx to build a documentation automatically.
+
+## Tests
+
+Tests can be found in the tests/ directory. They are currently not set up
+to be automatically executed with pytest.
+
+## Contributing
+
+Contributions are always welcome! To contribute fork the directory from
+github and ask me for the bot token. You may then develop your feature
+and issue a pull request. Don't forget the unit tests :)
+
+## License
+
+This project is licensed under BSD-2-Clause License. For more information
+see the LICENSE.txt file.
 
 
