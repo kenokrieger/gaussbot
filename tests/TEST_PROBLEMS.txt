@@ -1,0 +1,6 @@
+integrate sin(x) du
+integrate cos(u) from 0 to pi
+integrate sin(x) from -inf to inf
+integrate a**2 + b^2 - c, c
+integrate ax + b, x from 0 to inf
+integrate exp(-r^2) from -inf to inf

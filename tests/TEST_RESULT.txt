@@ -1,0 +1,6 @@
+(True, u*sin(x), sin(x))
+(True, 0, cos(u))
+(True, 0, sin(x))
+(True, -c**2/2 + c*(a**2 + b**2), a**2 + b**2 - c)
+(True, a*f**2*i**2*n**2/2 + b*f*i*n, a*x + b)
+(True, sqrt(pi)*erf(f*i*n), exp(-r**2))
