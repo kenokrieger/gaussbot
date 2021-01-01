@@ -1,8 +1,8 @@
 """Contains tests for the brain module"""
-import gauss.brain
+from gauss.brain import do_integration
 import sys
 
-TEST_PROBLEMS = open('TEST_PROBLEMS.txt', 'r').readlines()
+TEST_PROBLEMS = open('tests/TEST_PROBLEMS.txt', 'r').readlines()
 
 
 def test_integration():
@@ -11,12 +11,12 @@ def test_integration():
 
     for problem in TEST_PROBLEMS:
         try:
-            result += str(gauss.brain.do_integration(problem)) + '\n'
+            result += str(do_integration(problem)) + '\n'
         except Exception as exc:
             print(problem, str(exc))
             print(sys.exc_info()[2].tb_frame.f_code.co_filename)
 
-    with open('TEST_RESULT.txt', 'w') as f:
+    with open('tests/TEST_RESULT.txt', 'w') as f:
         f.write(result)
 
 

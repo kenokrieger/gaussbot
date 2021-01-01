@@ -3,4 +3,6 @@ integrate cos(u) from 0 to pi
 integrate sin(x) from -inf to inf
 integrate a**2 + b^2 - c, c
 integrate ax + b, x from 0 to inf
-integrate exp(-r^2) from -inf to inf
+integrate exp(-r^2) from -1 to 1
+integrate sin(exp(x**2)) * sqrt(210245626) from 1 to 2
+integrate sin(ax) dx

@@ -5,7 +5,7 @@
 Johann Carl Friedrich Gauss  (30 April 1777 – 23 February 1855)
 was a German mathematician and physicist who made significant
 contributions to many fields in mathematics and science 
-(taken from <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">wikipedia</a>.)
+(taken from <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">wikipedia</a>).
 
 The gauss discord bot is designed to help with mathematical
 inquiries of all sorts. He will help you to solve integrals and 

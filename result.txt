@@ -1,0 +1,13 @@
+import matplotlib.pyplot as plt
+
+latexstr = r'\begin{cases} - \frac{\cos{\left(a x \right)}}{a} & \text{for}\: a \neq 0 \\0 & \text{otherwise} \end{cases}'
+
+if 'cases' in latexstr:
+    clearstr = latexstr.replace(r'\begin{cases}', '').replace(r'\end{cases}', '').replace('&', '').replace(r'\text', r'\mathtt')
+    liststr = clearstr.split(r'\\')
+
+_ = -1
+for string in liststr:
+    _ += 1
+    plt.text(0, _, r'${}$'.format(string))
+plt.show()

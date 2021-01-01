@@ -1,16 +1,18 @@
 from os import getenv
+from os.path import join
 
 import discord
 from dotenv import load_dotenv
 
-from gauss.brain import do_integration, do_integration_again
+from gauss.brain import do_integration, do_integration_again, do_derivation, do_derivation_again
 
 load_dotenv()
 TOKEN: str = getenv('DISCORD_TOKEN')
 GUILD: str = getenv('DISCORD_GUILD')
+PREVIEWS: str = join(__file__[:-6], '_previews')
 
 
-class gauss(discord.Client):
+class GaussBot(discord.Client):
     """The almighty gauss bot"""
 
     async def on_ready(self):
@@ -38,11 +40,18 @@ class gauss(discord.Client):
         elif 'integrate' in message.content:
             solved, integral, integrand, limits = do_integration(message.content)
 
-            if solved:
-                await message.channel.send(integral)
-            elif not solved:
+            if not solved:
                 await message.channel.send(integral)
                 response = await self.wait_for('message')
-                integral = do_integration_again(integrand, response.content, limits)
+                do_integration_again(integrand, response.content, limits)
 
-                await message.channel.send(integral)
+            await message.channel.send('This is how I understood your query:')
+            await message.channel.send(file=discord.File(join(PREVIEWS, 'input.png')))
+            await message.channel.send('This is my solution:')
+            await message.channel.send(file=discord.File(join(PREVIEWS, 'output.png')))
+
+        elif 'diff' in message.content:
+            solved, derivative = do_derivation(message.content)
+
+            if not solved:
+                pass
