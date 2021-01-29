@@ -6,12 +6,13 @@ from dotenv import load_dotenv
 
 from .brain import do_integration, do_integration_again, do_derivation,\
     do_derivation_again
+from ._physicists import PHYSICISTS
 
 load_dotenv()
-TOKEN = getenv('DISCORD_TOKEN')
-GUILD = getenv('DISCORD_GUILD')
-KENO = int(getenv('KENO'))
-MIKE = int(getenv('MIKE'))
+TOKEN = getenv("DISCORD_TOKEN")
+GUILD = getenv("DISCORD_GUILD")
+KENO = PHYSICISTS["KENO"]
+MIKE = PHYSICISTS["MIKE"]
 PREVIEWS = join(__file__[:-6], '_previews')
 
 
@@ -25,13 +26,10 @@ class GaussBot(discord.Client):
 
     async def on_message(self, message):
         """
-        Responding to messages
+        Responding to messages.
 
-        Args:
-            message(str): The content of the message.
-
-        Returns:
-            None.
+        :param message: The content of the message.
+        :type message: str
         """
         if message.author == self.user:
             return
@@ -41,7 +39,8 @@ class GaussBot(discord.Client):
             await message.channel.send("Hallo, mein Meister")
 
         if message.author.id == MIKE and 'moin' in message.content.lower():
-            await message.channel.send("Oh, it's Euler! Our battle will be legendary!")
+            msg = "Oh, it's Euler! Our battle will be legendary!"
+            await message.channel.send(msg)
 
         with open('discord_IDs.txt', 'a') as f:
             f.write("{}:{}\n".format(message.author.name, message.author.id))

@@ -1,8 +1,7 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
 
-from sympy import integrate, Integral, latex, diff, oo
-from matplotlib.pyplot import subplots, close
+from sympy import integrate, Integral, diff
 from .parse import to_sympy
 import matplotlib as mpl
 mpl.rcParams['text.usetex'] = True
@@ -13,11 +12,10 @@ def do_integration(message):
     """
     Integrate a mathematical expression.
 
-    Args:
-        message(str): A string containing the expression to integrate.
-    Returns:
-        tuple: A status report, the integrated solution and the input.
-
+    :param message: A string containing the expression to integrate.
+    :type message: str
+    :return: A status report, the integrated solution and the input.
+    :rtype: tuple
     """
     integral = message.split('integrate')[1]
     integral, intvar = _find_intvar(integral)
@@ -50,19 +48,21 @@ def do_integration(message):
 
 def do_integration_again(integrand, variable, limits):
     """
-    Follows up the do_integration function if no integration variable was found.
+    Follows up the do_integration function if no integration variable
+    was found.
 
-    Args:
-        integrand(sympy.object):
-        variable(str):
-        limits(tuple):
-
-    Returns
-        sympy.object: The solution.
-
+    :param integrand: The integrand of the integral to evaluate.
+    :type integrand: sympy.core
+    :param variable: The integration variable.
+    :type variable: str
+    :param limits: The lower and upper limit for the integral.
+    :type limits: tuple
+    :return: The solved integral.
+    :rtype: sympy.core
     """
     if limits is not None:
-        savepng(Integral(integrand, (to_sympy(variable), limits[0], limits[1])), join(PREVIEWS, 'input.png'))
+        savepng(Integral(integrand, (to_sympy(variable), limits[0], limits[1])),
+                join(PREVIEWS, 'input.png'))
     else:
         savepng(Integral(integrand, to_sympy(variable)), join(PREVIEWS, 'input.png'))
     return _integration(integrand, to_sympy(variable), limits)
@@ -90,60 +90,6 @@ def do_derivation_again(derivative, var):
     return diff(derivative, to_sympy(var))
 
 
-def savepng(expr, filename, dpi=100):
-    """
-    Saves a sympy expression as a png with help of matplotlib.
-    :param expr:
-    :param filename:
-    :param dpi:
-    :return:
-    """
-    fig, ax = subplots(frameon=False)
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    render = fig.canvas.get_renderer()
-
-    plottext = r'{}'.format(latex(expr)).replace(r'\sffamily', '').replace(
-        r'\operatorname', r'\mathtt')
-    if 'cases' in plottext:
-        _caseplot(fig, ax, render, plottext)
-    else:
-        text = ax.text(0.05, 0.4, r'${}$'.format(plottext), fontsize=50)
-        textdim = text.get_window_extent(renderer=render)
-
-        fig.set_size_inches(textdim.width / 50, textdim.height / 50)
-    fig.savefig(filename, dpi=dpi)
-    close()
-
-
-def _caseplot(fig, ax, render, plottext):
-    """
-    Plots the solution if multiple cases exist.
-    :param fig:
-    :param ax:
-    :param plottext:
-    :return:
-    """
-
-    clearstr = plottext.replace(r'\begin{cases}', '').replace(r'\end{cases}', '')\
-        .replace('&', '').replace(r'\text', r'\mathtt')
-    cases = clearstr.split(r'\\')
-
-    ypos = -0.2
-    heights = []
-    widths = []
-
-    for case in cases:
-        ypos += 0.1
-        pltext = ax.text(0.1, ypos, r'${}$'.format(case), fontsize=25)
-        textdim = pltext.get_window_extent(renderer=render)
-        print(textdim.height)
-        heights.append(textdim.height / 50)
-        widths.append(textdim.width / 50)
-    ax.set(ylim=(-0.2, ypos + 0.1))
-    fig.set_size_inches(max(widths), sum(heights))
-
-
 def _isdefinite(message):
     """
     Checks whether the inquiry is a indefinite or definite integral.
@@ -152,7 +98,8 @@ def _isdefinite(message):
         message(str): The message to check.
 
     Returns:
-        bool: True for a definite integral and False for an indefinite integral.
+        bool: True for a definite integral and False for an indefinite
+            integral.
 
     """
     return 'from' in message
@@ -162,13 +109,11 @@ def _find_intvar(message):
     """
     Checks whether an integration variable was declared in the message or not.
 
-    Args:
-        message(str): An expression that might contain an integration variable.
-
-    Returns:
-        tuple: The modified message that excludes the integration variable and
-            if found the integration variable else None.
-
+    :param message: An expression that might contain an integration variable.
+    :type message: str
+    :return: The modified message that excludes the integration variable and
+        if found the integration variable else None.
+    :rtype: tuple
     """
     if 'd' in message:
         varindex = message.find('d') + 1
@@ -197,8 +142,8 @@ def _integration(integrand, variable, limits=None):
 
     Args:
         integrand(sympy.object): The integrand.
-        limits(tuple): The lower and upper bound of the integral default to None meaning the
-            indefinite integral will be computed.
+        limits(tuple): The lower and upper bound of the integral defaults to
+            None meaning the indefinite integral will be computed.
 
     """
     if limits is None:
@@ -222,8 +167,8 @@ def _sep_integrand(integral):
     """
     integrand = to_sympy(integral.split('from')[0])
     limits = integral.split('from')[1].split('to')
-    lower_bound = to_sympy(limits[0]) if limits[0].strip() != '-inf' else -oo
-    upper_bound = to_sympy(limits[1]) if limits[1].strip() != 'inf' else oo
+    lower_bound = to_sympy(limits[0])
+    upper_bound = to_sympy(limits[1])
     limits = (lower_bound, upper_bound)
 
     return integrand, limits
