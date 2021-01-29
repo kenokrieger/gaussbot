@@ -3,69 +3,101 @@ from os.path import join
 
 from sympy import integrate, Integral, diff
 from .parse import to_sympy
-import matplotlib as mpl
-mpl.rcParams['text.usetex'] = True
+from .rendering import save_as_png
+from ._physicists import PHYSICISTS
+import discord
 PREVIEWS = join(__file__[:-8], '_previews')
 
+GREETINGS = {
+    "KENO": "Moin, geiler Macker",
+    "MIKE": "Oh, it's Euler! Our battle will be legendary!",
+    "GLENN": "Oh, der Herr Axiomsmeister! Das erinnert mich an die"
+             " Zeit, als ich zeigte, dass das Parallelenproblem"
+             " unlösbar ist.",
+    "TOMMY": "Ah, der Oberbagauner beehrt mich also auch.",
+    "JEREMY": "做你的事",
+    "TARO": "Mich crasht du nicht noch einmal!"
+}
+NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
+                            " Variablen verwenden?! Für welche von denen " \
+                            "soll ich das denn integrieren?\n Such dir eine" \
+                            " aus: {}"
 
-def do_integration(message):
+
+def greet(message):
+    """
+    Greets the user that sends a greeting to the bot depending on
+    the users id.
+
+    :param message: A discord message containing a greeting.
+    :type message: :class:`discord.message.Message`
+    :return: The appropriate response
+    :rtype: str
+    """
+    for physicist in PHYSICISTS.keys():
+        if message.author.id == PHYSICISTS[physicist]:
+            response = GREETINGS[physicist]
+            break
+    else:
+        try:
+            response = "Hi " + message.author.name
+        except UnicodeEncodeError:
+            response = "Hi"
+    return message.channel.send(response)
+
+
+def pay_respect(message):
+    """
+    F in the chat
+
+    :return: Respect
+    :rtype: str
+    """
+    return message.channel.send('F')
+
+
+def do_integration(message, response=None):
     """
     Integrate a mathematical expression.
 
-    :param message: A string containing the expression to integrate.
-    :type message: str
-    :return: A status report, the integrated solution and the input.
-    :rtype: tuple
+    :param message: A discord message containing the expression to integrate.
+    :type message: :class:`discord.message.Message`
+    :param response: If no integration variable was declared previously
+        response will contain all the information from the previous attempt
+        as well as the integration variable.
+    :type response: dict
     """
-    integral = message.split('integrate')[1]
-    integral, intvar = _find_intvar(integral)
+    if response is None:
+        integral = message.content.split('integrate')[1]
+        integral, intvar = _find_intvar(integral)
 
-    if _isdefinite(integral):
-        integrand, limits = _sep_integrand(integral)
-
-    else:
-        integrand = to_sympy(integral)
-        limits = None
-
-    variables = integrand.free_symbols
-    if intvar is None:
-        if len(variables) > 1:
-            answer = '\n'.join((
-                'I\'m not sure with respect to what variable you expect me to integrate.',
-                'You may chose one of the following: {}\n'.format(variables)
-            ))
-            return False, answer, integrand, limits
-
+        if _isdefinite(integral):
+            integrand, limits = _sep_integrand(integral)
         else:
-            (intvar, ) = variables
+            integrand = to_sympy(integral)
+            limits = None
 
-    if limits is not None:
-        savepng(Integral(integrand, (intvar, limits[0], limits[1])), join(PREVIEWS, 'input.png'))
+        variables = integrand.free_symbols
+        if intvar is None:
+            if len(variables) > 1:
+                question = NO_INTVAR_DECLARED_ERRMSG.format(variables)
+                response = {"raise": message.channel.send(question),
+                            "integrand": integrand, "limits": limits}
+                return response
+            else:
+                (intvar, ) = variables
     else:
-        savepng(Integral(integrand, intvar), join(PREVIEWS, 'input.png'))
-    return True, _integration(integrand, intvar, limits), integrand, limits
+        integrand = response["integrand"]
+        intvar = response["intvar"]
+        limits = response["limits"]
+    _save_input(integrand, intvar, limits=limits)
+    _integration(integrand, intvar, limits)
 
 
-def do_integration_again(integrand, variable, limits):
-    """
-    Follows up the do_integration function if no integration variable
-    was found.
-
-    :param integrand: The integrand of the integral to evaluate.
-    :type integrand: sympy.core
-    :param variable: The integration variable.
-    :type variable: str
-    :param limits: The lower and upper limit for the integral.
-    :type limits: tuple
-    :return: The solved integral.
-    :rtype: sympy.core
-    """
-    if limits is not None:
-        savepng(Integral(integrand, (to_sympy(variable), limits[0], limits[1])),
-                join(PREVIEWS, 'input.png'))
-    else:
-        savepng(Integral(integrand, to_sympy(variable)), join(PREVIEWS, 'input.png'))
-    return _integration(integrand, to_sympy(variable), limits)
+def integration_was_successful(response):
+    """Checks whether the integration was successful or not by observing the
+    returned response"""
+    return True if response is None else False
 
 
 def do_derivation(message):
@@ -105,13 +137,33 @@ def _isdefinite(message):
     return 'from' in message
 
 
+def _sep_integrand(integral):
+    """
+    Extracts integrand and limits from an integral expression.
+
+    Args:
+        integral(str): Expression containing integrand and limits.
+
+    Returns:
+        tuple: The integrand and the limits as a tuple
+
+    """
+    integrand = to_sympy(integral.split('from')[0])
+    limits = integral.split('from')[1].split('to')
+    lower_bound = to_sympy(limits[0])
+    upper_bound = to_sympy(limits[1])
+    limits = (lower_bound, upper_bound)
+
+    return integrand, limits
+
+
 def _find_intvar(message):
     """
     Checks whether an integration variable was declared in the message or not.
 
     :param message: An expression that might contain an integration variable.
     :type message: str
-    :return: The modified message that excludes the integration variable and
+    :return: The modified message without the integration variable and
         if found the integration variable else None.
     :rtype: tuple
     """
@@ -150,25 +202,22 @@ def _integration(integrand, variable, limits=None):
         result = integrate(integrand, variable)
     else:
         result = integrate(integrand, (variable, limits[0], limits[1]))
-    savepng(result, join(PREVIEWS, 'output.png'))
-    return result
+    save_as_png(result, join(PREVIEWS, 'output.png'))
 
 
-def _sep_integrand(integral):
+def _save_input(integrand, intvar, limits=None):
     """
-    Extracts integrand and limits from an integral expression.
+    Saves the given input as a png.
 
-    Args:
-        integral(str): Expression containing integrand and limits.
-
-    Returns:
-        tuple: The integrand and the limits as a tuple
-
+    :param integrand: The integrand of an integral.
+    :type integrand: sympy.core object
+    :param intvar: The integration variable.
+    :type intvar: sympy.core object
+    :param limits: The limits for the integration. Defaults to None.
+    :type limits: tuple
     """
-    integrand = to_sympy(integral.split('from')[0])
-    limits = integral.split('from')[1].split('to')
-    lower_bound = to_sympy(limits[0])
-    upper_bound = to_sympy(limits[1])
-    limits = (lower_bound, upper_bound)
-
-    return integrand, limits
+    if limits is not None:
+        save_as_png(Integral(integrand, (intvar, limits[0], limits[1])),
+                    join(PREVIEWS, 'input.png'))
+    else:
+        save_as_png(Integral(integrand, intvar), join(PREVIEWS, 'input.png'))

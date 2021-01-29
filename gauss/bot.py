@@ -4,16 +4,17 @@ from os.path import join
 import discord
 from dotenv import load_dotenv
 
-from .brain import do_integration, do_integration_again, do_derivation,\
-    do_derivation_again
-from ._physicists import PHYSICISTS
+from .coordinator import is_valid, find_task
+from .parse import to_sympy
+from .brain import greet, do_integration, pay_respect, \
+    integration_was_successful
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
 GUILD = getenv("DISCORD_GUILD")
-KENO = PHYSICISTS["KENO"]
-MIKE = PHYSICISTS["MIKE"]
 PREVIEWS = join(__file__[:-6], '_previews')
+VIEW_INPUT = join(PREVIEWS, 'input.png')
+VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 
 
 class GaussBot(discord.Client):
@@ -26,47 +27,37 @@ class GaussBot(discord.Client):
 
     async def on_message(self, message):
         """
-        Responding to messages.
+        Coordinates what happens once a message is received.
 
         :param message: The content of the message.
         :type message: str
         """
-        if message.author == self.user:
-            return
-        if message.channel.name != "gauss":
-            return
-        if message.author.id == KENO and 'moin' in message.content.lower():
-            await message.channel.send("Hallo, mein Meister")
-
-        if message.author.id == MIKE and 'moin' in message.content.lower():
-            msg = "Oh, it's Euler! Our battle will be legendary!"
-            await message.channel.send(msg)
-
         with open('discord_IDs.txt', 'a') as f:
-            f.write("{}:{}\n".format(message.author.name, message.author.id))
-
-        if message.content.lower() in ['rip', 'r.i.p.']:
-            await message.channel.send('F')
-
-        if message.content == 'Hi':
-            response = 'Hi'
-            await message.channel.send(response)
-
-        elif 'integrate' in message.content:
-            solved, integral, integrand, limits = do_integration(message.content)
-
-            if not solved:
-                await message.channel.send(integral)
-                response = await self.wait_for('message')
-                do_integration_again(integrand, response.content, limits)
-
-            await message.channel.send('This is how I understood your query:')
-            await message.channel.send(file=discord.File(join(PREVIEWS, 'input.png')))
-            await message.channel.send('This is my solution:')
-            await message.channel.send(file=discord.File(join(PREVIEWS, 'output.png')))
-
-        elif 'diff' in message.content:
-            solved, derivative = do_derivation(message.content)
-
-            if not solved:
+            try:
+                f.write("{}:{}\n".format(message.author.name,
+                                         message.author.id))
+            except UnicodeEncodeError:
                 pass
+
+        if not is_valid(message):
+            return
+
+        task = find_task(message)
+        if task == "greet":
+            await greet(message)
+        elif task == "pay respect":
+            await pay_respect(message)
+        elif task == "integrate":
+            response = do_integration(message)
+            if not integration_was_successful(response):
+                await response["raise"]
+                answer = await self.wait_for('message')
+                response["intvar"] = to_sympy(answer.content)
+                do_integration(message, response=response)
+
+            await message.channel.send(
+                'Das Integral packst du nicht selber?!',
+                file=discord.File(VIEW_INPUT))
+            await message.channel.send(
+                'TRIVIAL!',
+                file=discord.File(VIEW_OUTPUT))
