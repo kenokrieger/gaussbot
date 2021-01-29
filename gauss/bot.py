@@ -4,12 +4,15 @@ from os.path import join
 import discord
 from dotenv import load_dotenv
 
-from gauss.brain import do_integration, do_integration_again, do_derivation, do_derivation_again
+from .brain import do_integration, do_integration_again, do_derivation,\
+    do_derivation_again
 
 load_dotenv()
-TOKEN: str = getenv('DISCORD_TOKEN')
-GUILD: str = getenv('DISCORD_GUILD')
-PREVIEWS: str = join(__file__[:-6], '_previews')
+TOKEN = getenv('DISCORD_TOKEN')
+GUILD = getenv('DISCORD_GUILD')
+KENO = int(getenv('KENO'))
+MIKE = int(getenv('MIKE'))
+PREVIEWS = join(__file__[:-6], '_previews')
 
 
 class GaussBot(discord.Client):
@@ -32,9 +35,22 @@ class GaussBot(discord.Client):
         """
         if message.author == self.user:
             return
+        if message.channel.name != "gauss":
+            return
+        if message.author.id == KENO and 'moin' in message.content.lower():
+            await message.channel.send("Hallo, mein Meister")
+
+        if message.author.id == MIKE and 'moin' in message.content.lower():
+            await message.channel.send("Oh, it's Euler! Our battle will be legendary!")
+
+        with open('discord_IDs.txt', 'a') as f:
+            f.write("{}:{}\n".format(message.author.name, message.author.id))
+
+        if message.content.lower() in ['rip', 'r.i.p.']:
+            await message.channel.send('F')
 
         if message.content == 'Hi':
-            response: str = 'Hi'
+            response = 'Hi'
             await message.channel.send(response)
 
         elif 'integrate' in message.content:

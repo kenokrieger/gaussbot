@@ -1,12 +1,12 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
 
-from sympy import integrate, Integral, latex, diff
-from matplotlib.pyplot import subplots
-from gauss.parse import to_sympy
+from sympy import integrate, Integral, latex, diff, oo
+from matplotlib.pyplot import subplots, close
+from .parse import to_sympy
 import matplotlib as mpl
 mpl.rcParams['text.usetex'] = True
-PREVIEWS: str = join(__file__[:-8], '_previews')
+PREVIEWS = join(__file__[:-8], '_previews')
 
 
 def do_integration(message):
@@ -103,7 +103,8 @@ def savepng(expr, filename, dpi=100):
     ax.get_yaxis().set_visible(False)
     render = fig.canvas.get_renderer()
 
-    plottext = r'{}'.format(latex(expr)).replace(r'\sffamily', '').replace(r'\operatorname', r'\mathtt')
+    plottext = r'{}'.format(latex(expr)).replace(r'\sffamily', '').replace(
+        r'\operatorname', r'\mathtt')
     if 'cases' in plottext:
         _caseplot(fig, ax, render, plottext)
     else:
@@ -112,6 +113,7 @@ def savepng(expr, filename, dpi=100):
 
         fig.set_size_inches(textdim.width / 50, textdim.height / 50)
     fig.savefig(filename, dpi=dpi)
+    close()
 
 
 def _caseplot(fig, ax, render, plottext):
@@ -132,13 +134,14 @@ def _caseplot(fig, ax, render, plottext):
     widths = []
 
     for case in cases:
-        ypos += 0.3
-        text = ax.text(0.1, ypos, r'${}$'.format(case), fontsize=25)
-        textdim = text.get_window_extent(renderer=render)
-        heights.append(textdim.height / 20)
+        ypos += 0.1
+        pltext = ax.text(0.1, ypos, r'${}$'.format(case), fontsize=25)
+        textdim = pltext.get_window_extent(renderer=render)
+        print(textdim.height)
+        heights.append(textdim.height / 50)
         widths.append(textdim.width / 50)
-
-    fig.set_size_inches(max(widths), max(heights))
+    ax.set(ylim=(-0.2, ypos + 0.1))
+    fig.set_size_inches(max(widths), sum(heights))
 
 
 def _isdefinite(message):
@@ -219,8 +222,8 @@ def _sep_integrand(integral):
     """
     integrand = to_sympy(integral.split('from')[0])
     limits = integral.split('from')[1].split('to')
-    lower_bound = to_sympy(limits[0])
-    upper_bound = to_sympy(limits[1])
+    lower_bound = to_sympy(limits[0]) if limits[0].strip() != '-inf' else -oo
+    upper_bound = to_sympy(limits[1]) if limits[1].strip() != 'inf' else oo
     limits = (lower_bound, upper_bound)
 
     return integrand, limits

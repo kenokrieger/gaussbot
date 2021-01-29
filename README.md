@@ -13,19 +13,20 @@ to differentiate and probably even more in the future.
 
 ## Requirements
 
-This package requires python 3.6 or higher aswell as the external packages 
+This package requires python 3.6 as well as the external packages 
 sympy and discord.
 
 ## Installation
 
 There is currently no pip install option. The package may be installed by
-copy pasting the source code in your python directory.
+copying and pasting the source code in your python directory.
 
 ## Usage
 
 ### User
 
 #### Integration
+
 To integrate an expression, simply start of with 'integrate' followed by 
 the expression to integrate. You may also specify the integration
 variable *x* by 
@@ -46,9 +47,10 @@ integrate a**2 + b^2 - c, c
 integrate ax + b, x from 0 to b
 integrate exp(-r^2) from -pi to pi
 ```
+
 ### Host
 
-To host the bot you need to install the package and be in possesion of the
+To host the bot you need to install the package and be in possession of the
 required .env file with the token for the bot. You can then run the bot by
 executing a script with the following code:
 ```python
@@ -62,7 +64,7 @@ if __name__ == '__main__':
 
 ## Documentation
 
-All funtions and modules are documented in the code directly. In the
+All functions and modules are documented in the code directly. In the
 near future I will set up sphinx to build a documentation automatically.
 
 ## Tests
@@ -73,12 +75,10 @@ to be automatically executed with pytest.
 ## Contributing
 
 Contributions are always welcome! To contribute fork the directory from
-github and ask me for the bot token. You may then develop your feature
-and issue a pull request. Don't forget the unit tests :)
+github and ask me for the bot token. For more detailed information see
+'CONTRIBUTING.md'.
 
 ## License
 
 This project is licensed under BSD-2-Clause License. For more information
 see the LICENSE.txt file.
-
-
