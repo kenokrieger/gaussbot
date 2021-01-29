@@ -210,8 +210,8 @@ def show_latex(message):
     :type message: :class:`discord.message.Message`
     """
     latex_part = message.content.split("show")[1]
-    save_as_png(latex_part, VIEW_OUTPUT)
-    return message.channel.send(file=VIEW_OUTPUT)
+    save_as_png(latex_part, VIEW_OUTPUT, is_latex=True)
+    return message.channel.send(file=discord.File(VIEW_OUTPUT))
 
 
 def do_derivation(message):

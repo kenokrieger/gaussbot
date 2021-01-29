@@ -48,6 +48,12 @@ integrate ax + b, x from 0 to b
 integrate exp(-r^2) from -pi to pi
 ```
 
+#### Latex
+
+You can use the 'show' command to let gauss render a latex string for you, e.g.
+`show \int_{-\infty}^{\infty} e^{-x^2} dx`
+
+
 ### Host
 
 To host the bot you need to install the package and be in possession of the
