@@ -1,5 +1,6 @@
 from os import getenv
 from os.path import join
+from time import sleep
 
 import discord
 from dotenv import load_dotenv
@@ -15,7 +16,10 @@ GUILD = getenv("DISCORD_GUILD")
 PREVIEWS = join(__file__[:-6], '_previews')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
-
+GAUSSIAN_INTEGRAL_MSG = "Mhh, das ist ein schwerer Brocken. Ein guter " \
+                        "Mathematiker könnte dir damit vielleicht " \
+                        "weiterhelfen\n Ich habe gehört, daraus ein " \
+                        "zweidimensionales Integral zu machen soll helfen."
 
 class GaussBot(discord.Client):
     """The almighty gauss bot"""
@@ -52,10 +56,14 @@ class GaussBot(discord.Client):
         elif task == "integrate":
             response = do_integration(message)
             if not integration_was_successful(response):
-                await response["raise"]
-                answer = await self.wait_for('message')
-                response["intvar"] = to_sympy(answer.content)
-                do_integration(message, response=response)
+                if response["gauss"]:
+                    await message.channel.send(GAUSSIAN_INTEGRAL_MSG)
+                    return
+                else:
+                    await response["raise"]
+                    answer = await self.wait_for('message')
+                    response["intvar"] = to_sympy(answer.content)
+                    do_integration(message, response=response)
 
             await message.channel.send(
                 'Das Integral packst du nicht selber?!',
@@ -63,3 +71,6 @@ class GaussBot(discord.Client):
             await message.channel.send(
                 'TRIVIAL!',
                 file=discord.File(VIEW_OUTPUT))
+        else:
+            if message.attachments.first():
+                print(message.attachments.first().filename)

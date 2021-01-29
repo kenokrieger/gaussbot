@@ -1,7 +1,7 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
 
-from sympy import integrate, Integral, diff
+from sympy import integrate, Integral, diff, simplify, Symbol, oo, E
 from .parse import to_sympy
 from .rendering import save_as_png
 from ._physicists import PHYSICISTS
@@ -9,6 +9,8 @@ import discord
 PREVIEWS = join(__file__[:-8], '_previews')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
+X = Symbol('X')
+GAUSSIAN_INTEGRAL = Integral(E ** (-X ** 2), (X, -oo, oo))
 GREETINGS = {
     "KENO": "Moin, geiler Macker",
     "MIKE": "Oh, it's Euler! Our battle will be legendary!",
@@ -17,7 +19,8 @@ GREETINGS = {
              " unlösbar ist.",
     "TOMMY": "Ah, der Oberbagauner beehrt mich also auch.",
     "JEREMY": "做你的事",
-    "TARO": "Mich crasht du nicht noch einmal!"
+    "TARO": "Mich crasht du nicht noch einmal!",
+    "HENRI": "Aha, der Herr Dr.Renzelmann beehrt mich also auch."
 }
 NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
                             " Variablen verwenden?! Für welche von denen " \
@@ -83,7 +86,8 @@ def do_integration(message, response=None):
             if len(variables) > 1:
                 question = NO_INTVAR_DECLARED_ERRMSG.format(variables)
                 response = {"raise": message.channel.send(question),
-                            "integrand": integrand, "limits": limits}
+                            "integrand": integrand, "limits": limits,
+                            "gauss": False}
                 return response
             else:
                 (intvar, ) = variables
@@ -91,6 +95,8 @@ def do_integration(message, response=None):
         integrand = response["integrand"]
         intvar = response["intvar"]
         limits = response["limits"]
+    if _is_gaussian_integral(integrand, intvar, limits):
+        return {"gauss": True}
     _save_input(integrand, intvar, limits=limits)
     _integration(integrand, intvar, limits)
 
@@ -99,6 +105,16 @@ def integration_was_successful(response):
     """Checks whether the integration was successful or not by observing the
     returned response"""
     return True if response is None else False
+
+
+def _is_gaussian_integral(integrand, intvar, limits):
+    if limits is None:
+        return False
+    current_integral = Integral(integrand, (intvar, limits[0], limits[1]))
+    if simplify(current_integral - GAUSSIAN_INTEGRAL) == 0:
+        return True
+    else:
+        return False
 
 
 def _isdefinite(message):

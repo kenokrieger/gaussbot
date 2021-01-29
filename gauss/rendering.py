@@ -5,6 +5,10 @@ from sympy import latex
 custom_preamble = {
     "text.usetex": True,
     "text.latex.preamble": r"\usepackage{amsmath}"
+                           r"\newcommand{\gaussint}"
+                           r"{\int_{-\infty}^{\infty} e^{-x^2} dx}"
+                           r"\newcommand{\beauty}"
+                           r"{e^{i\pi} + 1 = 0}"
     }
 rcParams.update(custom_preamble)
 
