@@ -5,9 +5,9 @@ from time import sleep
 import discord
 from dotenv import load_dotenv
 
-from .coordinator import is_valid, find_task
-from .parse import to_sympy
-from .brain import greet, do_integration, pay_respect, show_latex, \
+from gauss.coordinator import is_valid, find_task
+from gauss.parse import to_sympy
+from gauss.brain import greet, do_integration, pay_respect, show_latex, \
     integration_was_successful
 
 load_dotenv()

@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API-Documentation &#8212; GaussBot  documentation</title>
+    <link rel="stylesheet" href="static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/doctools.js"></script>
+    <script src="static/language_data.js"></script>
+    <script type="text/javascript" src="static/sidebar.js"></script>
+    <script type="text/javascript" src="static/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Documentation" href="index.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="index.html"><span id="logotext1">Gau</span><span id="logotext2">ss</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Github Repository" href="https://github.com/kenokrieger/gaussbot"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="index.html" title="Documentation">
+	  &laquo; previous
+	</a>
+	
+      </li>
+      <li>
+	<a href="index.html">GaussBot  documentation</a>
+	 &#187;
+      </li>
+      
+      <li>API-Documentation</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-documentation">
+<h1>API-Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-bot">
+<span id="bot"></span><h2>bot<a class="headerlink" href="#module-bot" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="bot.GaussBot">
+<em class="property">class </em><code class="sig-prename descclassname">bot.</code><code class="sig-name descname">GaussBot</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">options</span></em><span class="sig-paren">)</span><a class="headerlink" href="#bot.GaussBot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The almighty gauss bot</p>
+<dl class="py method">
+<dt id="bot.GaussBot.on_message">
+<em class="property">async </em><code class="sig-name descname">on_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#bot.GaussBot.on_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coordinates what happens once a message is received.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – The content of the message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bot.GaussBot.on_ready">
+<em class="property">async </em><code class="sig-name descname">on_ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bot.GaussBot.on_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches for the bot connections on start</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-brain">
+<span id="brain"></span><h2>brain<a class="headerlink" href="#module-brain" title="Permalink to this headline">¶</a></h2>
+<p>This is where all useful functions for the gauss bot are located</p>
+<dl class="py function">
+<dt id="brain.do_derivation">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_derivation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_derivation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivates an expression.
+:param message:
+:return:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.do_integration">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_integration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">response</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_integration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate a mathematical expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord message containing the expression to integrate.</p></li>
+<li><p><strong>response</strong> (<em>dict</em>) – If no integration variable was declared previously
+response will contain all the information from the previous attempt
+as well as the integration variable.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.greet">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">greet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.greet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Greets the user that sends a greeting to the bot depending on
+the users id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord message containing a greeting.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The appropriate response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.integration_was_successful">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">integration_was_successful</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.integration_was_successful" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the integration was successful or not by observing the
+returned response</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.pay_respect">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">pay_respect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.pay_respect" title="Permalink to this definition">¶</a></dt>
+<dd><p>F in the chat</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Respect</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.show_latex">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">show_latex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.show_latex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an image out of a latex expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing latex code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-coordinator">
+<span id="coordinator"></span><h2>coordinator<a class="headerlink" href="#module-coordinator" title="Permalink to this headline">¶</a></h2>
+<p>Contains functions for finding out which task the brain shall perform</p>
+<dl class="py function">
+<dt id="coordinator.find_task">
+<code class="sig-prename descclassname">coordinator.</code><code class="sig-name descname">find_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#coordinator.find_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches through a message to find out if a task is to be performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – The message to search through.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The task to be performed and the message.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="coordinator.is_valid">
+<code class="sig-prename descclassname">coordinator.</code><code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#coordinator.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates that the received message is in the right channel and was not
+sent by a bot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if the message is valid, <cite>False</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rendering">
+<span id="rendering"></span><h2>rendering<a class="headerlink" href="#module-rendering" title="Permalink to this headline">¶</a></h2>
+<p>Module for saving a latex expression to a png file</p>
+<dl class="py function">
+<dt id="rendering.save_as_png">
+<code class="sig-prename descclassname">rendering.</code><code class="sig-name descname">save_as_png</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">expr</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">is_latex</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">300</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rendering.save_as_png" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a sympy expression as a png with the help of matplotlib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr</strong> (<em>sympy.core</em><em> or </em><em>latex str</em>) – A sympy expression that shall be displayed.</p></li>
+<li><p><strong>filename</strong> (<em>str</em><em> or </em><em>path</em>) – The path where the figure will be saved to.</p></li>
+<li><p><strong>is_latex</strong> – Specifies whether the string is already in latex format or
+needs to be parsed.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution of the image in dots per inch</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-parse">
+<span id="parse"></span><h2>parse<a class="headerlink" href="#module-parse" title="Permalink to this headline">¶</a></h2>
+<p>Contains all the necessary parsers for discord messages</p>
+<dl class="py function">
+<dt id="parse.to_sympy">
+<code class="sig-prename descclassname">parse.</code><code class="sig-name descname">to_sympy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse.to_sympy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a string containing mathematical expressions into sympy syntax.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – A string (usually a discord text message) containing a
+mathematical expression.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The parsed expression.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">API-Documentation</a><ul>
+<li><a class="reference internal" href="#module-bot">bot</a></li>
+<li><a class="reference internal" href="#module-brain">brain</a></li>
+<li><a class="reference internal" href="#module-coordinator">coordinator</a></li>
+<li><a class="reference internal" href="#module-rendering">rendering</a></li>
+<li><a class="reference internal" href="#module-parse">parse</a></li>
+</ul>
+</li>
+</ul>
+
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="sources/api.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, Keno Krieger.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.1.1. &nbsp;
+  </p>
+</footer>
+  </body>
+</html>

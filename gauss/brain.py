@@ -2,9 +2,9 @@
 from os.path import join
 
 from sympy import integrate, Integral, diff, simplify, Symbol, oo, E
-from .parse import to_sympy
-from .rendering import save_as_png
-from ._physicists import PHYSICISTS
+from gauss.parse import to_sympy
+from gauss.rendering import save_as_png
+from gauss._physicists import PHYSICISTS
 import discord
 PREVIEWS = join(__file__[:-8], '_previews')
 VIEW_INPUT = join(PREVIEWS, 'input.png')

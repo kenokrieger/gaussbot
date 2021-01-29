@@ -1,6 +1,5 @@
 """Contains functions for finding out which task the brain shall perform"""
 import discord
-from .brain import greet, do_integration
 
 VALID_CHANNELS = ["gauss", "troll"]
 GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey"]
