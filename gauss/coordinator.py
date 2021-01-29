@@ -44,3 +44,6 @@ def find_task(message):
 
     if message.content.lower() in ['rip', 'r.i.p.']:
         return "pay respect"
+
+    if "show" in message.content:
+        return "show"

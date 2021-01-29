@@ -9,19 +9,26 @@ custom_preamble = {
 rcParams.update(custom_preamble)
 
 
-def save_as_png(expr, filename, dpi=300):
+def save_as_png(expr, filename, latex=False, dpi=300):
     """
     Saves a sympy expression as a png with the help of matplotlib.
 
     :param expr: A sympy expression that shall be displayed.
-    :type expr: sympy.core
+    :type expr: sympy.core or latex str
     :param filename: The path where the figure will be saved to.
     :type filename: str or path
+    :param latex: Specifies whether the string is already in latex format or
+        needs to be parsed.
+    :type latex: bool
     :param dpi: The resolution of the image in dots per inch
     :type dpi: int
     """
     discord_background_color = "#36393F"
+    if latex:
+        text = r'${}$'.format(expr)
+    else:
+        text = r'${}$'.format(latex(expr))
     fig = figure(facecolor=discord_background_color)
-    fig.text(0, 0, r'${}$'.format(latex(expr)), color="white")
+    fig.text(0, 0, text, color="white")
     fig.savefig(filename, dpi=dpi, bbox_inches='tight')
     close()

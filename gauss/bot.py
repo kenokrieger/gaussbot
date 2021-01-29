@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from .coordinator import is_valid, find_task
 from .parse import to_sympy
-from .brain import greet, do_integration, pay_respect, \
+from .brain import greet, do_integration, pay_respect, show_latex, \
     integration_was_successful
 
 load_dotenv()
@@ -47,6 +47,8 @@ class GaussBot(discord.Client):
             await greet(message)
         elif task == "pay respect":
             await pay_respect(message)
+        elif task == "show":
+            await show_latex(message)
         elif task == "integrate":
             response = do_integration(message)
             if not integration_was_successful(response):

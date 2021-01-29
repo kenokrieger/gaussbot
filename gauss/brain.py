@@ -7,7 +7,8 @@ from .rendering import save_as_png
 from ._physicists import PHYSICISTS
 import discord
 PREVIEWS = join(__file__[:-8], '_previews')
-
+VIEW_INPUT = join(PREVIEWS, 'input.png')
+VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 GREETINGS = {
     "KENO": "Moin, geiler Macker",
     "MIKE": "Oh, it's Euler! Our battle will be legendary!",
@@ -100,28 +101,6 @@ def integration_was_successful(response):
     return True if response is None else False
 
 
-def do_derivation(message):
-    """
-    Derivates an expression.
-    :param message:
-    :return:
-    """
-    deriv = message.split('diff')[1]
-    derivative = to_sympy(deriv)
-    variables = derivative.free_symbols
-
-    if len(variables) > 1:
-        return False, derivative
-    else:
-        (var, ) = variables
-    solution = diff(derivative, var)
-    return True, solution
-
-
-def do_derivation_again(derivative, var):
-    return diff(derivative, to_sympy(var))
-
-
 def _isdefinite(message):
     """
     Checks whether the inquiry is a indefinite or definite integral.
@@ -202,7 +181,7 @@ def _integration(integrand, variable, limits=None):
         result = integrate(integrand, variable)
     else:
         result = integrate(integrand, (variable, limits[0], limits[1]))
-    save_as_png(result, join(PREVIEWS, 'output.png'))
+    save_as_png(result, VIEW_OUTPUT)
 
 
 def _save_input(integrand, intvar, limits=None):
@@ -218,6 +197,43 @@ def _save_input(integrand, intvar, limits=None):
     """
     if limits is not None:
         save_as_png(Integral(integrand, (intvar, limits[0], limits[1])),
-                    join(PREVIEWS, 'input.png'))
+                    VIEW_INPUT)
     else:
-        save_as_png(Integral(integrand, intvar), join(PREVIEWS, 'input.png'))
+        save_as_png(Integral(integrand, intvar), VIEW_INPUT)
+
+
+def show_latex(message):
+    """
+    Creates an image out of a latex expression.
+
+    :param message: A discord text message containing latex code.
+    :type message: :class:`discord.message.Message`
+    """
+    latex_part = message.content.split("show")[1]
+    save_as_png(latex_part, VIEW_OUTPUT)
+    return message.channel.send(file=VIEW_OUTPUT)
+
+
+def do_derivation(message):
+    """
+    Derivates an expression.
+    :param message:
+    :return:
+    """
+    deriv = message.split('diff')[1]
+    derivative = to_sympy(deriv)
+    variables = derivative.free_symbols
+
+    if len(variables) > 1:
+        return False, derivative
+    else:
+        (var, ) = variables
+    solution = diff(derivative, var)
+    return True, solution
+
+
+def do_derivation_again(derivative, var):
+    return diff(derivative, to_sympy(var))
+
+
+
