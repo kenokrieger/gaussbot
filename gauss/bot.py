@@ -1,6 +1,6 @@
 from os import getenv
 from os.path import join
-from time import sleep
+import traceback
 
 import discord
 from dotenv import load_dotenv
@@ -20,6 +20,7 @@ GAUSSIAN_INTEGRAL_MSG = "Mhh, das ist ein schwerer Brocken. Ein guter " \
                         "Mathematiker könnte dir damit vielleicht " \
                         "weiterhelfen\n Ich habe gehört, daraus ein " \
                         "zweidimensionales Integral zu machen soll helfen."
+
 
 class GaussBot(discord.Client):
     """The almighty gauss bot"""
@@ -46,31 +47,40 @@ class GaussBot(discord.Client):
         if not is_valid(message):
             return
 
-        task = find_task(message)
-        if task == "greet":
-            await greet(message)
-        elif task == "pay respect":
-            await pay_respect(message)
-        elif task == "show":
-            await show_latex(message)
-        elif task == "integrate":
-            response = do_integration(message)
-            if not integration_was_successful(response):
-                if response["gauss"]:
-                    await message.channel.send(GAUSSIAN_INTEGRAL_MSG)
-                    return
-                else:
-                    await response["raise"]
-                    answer = await self.wait_for('message')
-                    response["intvar"] = to_sympy(answer.content)
-                    do_integration(message, response=response)
+        try:
+            task = find_task(message)
+            if task == "greet":
+                await greet(message)
+            elif task == "pay respect":
+                await pay_respect(message)
+            elif task == "show":
+                await show_latex(message)
+            elif task == "integrate":
+                response = do_integration(message)
+                if not integration_was_successful(response):
+                    if response["gauss"]:
+                        await message.channel.send(GAUSSIAN_INTEGRAL_MSG)
+                        return
+                    else:
+                        await response["raise"]
+                        answer = await self.wait_for('message')
+                        response["intvar"] = to_sympy(answer.content)
+                        do_integration(message, response=response)
 
-            await message.channel.send(
-                'Das Integral packst du nicht selber?!',
-                file=discord.File(VIEW_INPUT))
-            await message.channel.send(
-                'TRIVIAL!',
-                file=discord.File(VIEW_OUTPUT))
-        else:
-            if message.attachments.first():
-                print(message.attachments.first().filename)
+                await message.channel.send(
+                    'Das Integral packst du nicht selber?!',
+                    file=discord.File(VIEW_INPUT))
+                await message.channel.send(
+                    'TRIVIAL!',
+                    file=discord.File(VIEW_OUTPUT))
+            else:
+                if message.attachments.first():
+                    print(message.attachments.first().filename)
+        except:
+            err_msg = traceback.format_exc()
+            with open("log.txt", 'a') as f:
+                f.write(err_msg + '\n')
+            await message.channel.send("Mhh, ich habe dich nicht verstanden. "
+                                       "Das könnte das Resultat eines internen"
+                                       " Fehlers sein, oder du hast dich bei"
+                                       " deiner Eingabe vertippt.")

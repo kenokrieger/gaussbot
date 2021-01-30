@@ -6,7 +6,7 @@ custom_preamble = {
     "text.usetex": True,
     "text.latex.preamble": r"\usepackage{amsmath}"
                            r"\newcommand{\gaussint}"
-                           r"{\int_{-\infty}^{\infty} e^{-x^2} dx}"
+                           r"{\int_{-\infty}^{\infty} e^{-x^2} dx ="r" \sqrt{\pi}}"
                            r"\newcommand{\beauty}"
                            r"{e^{i\pi} + 1 = 0}"
     }
@@ -23,15 +23,15 @@ def save_as_png(expr, filename, is_latex=False, dpi=300):
     :type filename: str or path
     :param is_latex: Specifies whether the string is already in latex format or
         needs to be parsed.
-    :type latex: bool
+    :type is_latex: bool
     :param dpi: The resolution of the image in dots per inch
     :type dpi: int
     """
     discord_background_color = "#36393F"
     if is_latex:
-        text = r"$\displaystyle" + r'{}$'.format(expr)
+        text = r"$\displaystyle " + r'{}$'.format(expr)
     else:
-        text = r'${}$'.format(latex(expr))
+        text = r'$\displaystyle {}$'.format(latex(expr))
     fig = figure(facecolor=discord_background_color)
     fig.text(0, 0, text, color="white")
     fig.savefig(filename, dpi=dpi, bbox_inches='tight')
