@@ -1,8 +1,10 @@
 """Contains functions for finding out which task the brain shall perform"""
 import discord
 
-VALID_CHANNELS = ["gauss", "troll"]
-GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey"]
+VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht"]
+GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey", "Ni hao", "privjet",
+                     "Konnichiwa", "Bonjour", "привет", "こんいちわ", "こんにちは",
+                     ]
 
 
 def is_valid(message):
@@ -46,3 +48,6 @@ def find_task(message):
 
     if "show" in message.content:
         return "show"
+
+    if "calc" in message.content:
+        return "calc"

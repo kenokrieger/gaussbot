@@ -64,14 +64,13 @@ from gauss.bot import GaussBot, TOKEN
 
 
 if __name__ == '__main__':
-    client = GaussBot()
-    client.run(TOKEN)
+    client = GaussBot() 
+    client.run(TOKEN) 
 ```
 
 ## Documentation
 
-All functions and modules are documented in the code directly. In the
-near future I will set up sphinx to build a documentation automatically.
+The documentation can be found at https://kenokrieger.github.io/gaussbot.
 
 ## Tests
 

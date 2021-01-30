@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from gauss.coordinator import is_valid, find_task
 from gauss.parse import to_sympy
 from gauss.brain import greet, do_integration, pay_respect, show_latex, \
-    integration_was_successful
+    integration_was_successful, do_calculation
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
@@ -73,6 +73,8 @@ class GaussBot(discord.Client):
                 await message.channel.send(
                     'TRIVIAL!',
                     file=discord.File(VIEW_OUTPUT))
+            elif task == "calc":
+                await do_calculation(message)
             else:
                 if message.attachments.first():
                     print(message.attachments.first().filename)

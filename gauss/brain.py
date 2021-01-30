@@ -20,7 +20,8 @@ GREETINGS = {
     "TOMMY": "Ah, der Oberbagauner beehrt mich also auch.",
     "JEREMY": "做你的事",
     "TARO": "Mich crasht du nicht noch einmal!",
-    "HENRI": "Aha, der Herr Dr.Renzelmann beehrt mich also auch."
+    "HENRI": "Aha, der Herr Prof. Dr.Renzelmann beehrt mich also auch.",
+    "HELMUT": "Moin, Helmut."
 }
 NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
                             " Variablen verwenden?! Für welche von denen " \
@@ -162,24 +163,19 @@ def _find_intvar(message):
         if found the integration variable else None.
     :rtype: tuple
     """
-    if 'd' in message:
-        varindex = message.find('d') + 1
-        intvar = to_sympy(message[varindex])
-        message = message[:varindex - 1] + message[varindex + 1:]
-        return message, intvar
+    variable_declarer = ['d', ',', 'with respect to']
 
-    if ',' in message or 'with respect to' in message:
-        delimiter = ',' if ',' in message else 'with respect to'
-        content = message.split(delimiter)
-        if 'from' in content[1]:
-            subcontent = content[1].split('from')
-            intvar = to_sympy(subcontent[0])
-            message = content[0] + 'from ' + subcontent[1]
-            return message, intvar
-        else:
-            return content[0], to_sympy(content[1])
-    else:
-        return message, None
+    for delimiter in variable_declarer:
+        if delimiter in message:
+            content = message.split(delimiter)
+            if 'from' in content[1]:
+                subcontent = content[1].split('from')
+                intvar = to_sympy(subcontent[0])
+                message = content[0] + 'from ' + subcontent[1]
+                return message, intvar
+            else:
+                return content[0], to_sympy(content[1])
+    return message, None
 
 
 def _integration(integrand, variable, limits=None):
@@ -228,6 +224,20 @@ def show_latex(message):
     latex_part = message.content.split("show")[1]
     save_as_png(latex_part, VIEW_OUTPUT, is_latex=True)
     return message.channel.send(file=discord.File(VIEW_OUTPUT))
+
+
+def do_calculation(message):
+    """
+    Converts the given input into a float number and sends it back to the
+    user.
+
+    :param message: A discord text message containing something to evaluate.
+    :type message: :class:`discord.message.Message`
+    :return: The message to send.
+    """
+    calculation_part = message.content.split("calc")[1]
+    calculation = to_sympy(calculation_part, numerical=True)
+    return message.channel.send("{:.8E}".format(calculation))
 
 
 def do_derivation(message):
