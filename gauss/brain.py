@@ -1,28 +1,20 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
-
 from sympy import integrate, Integral, diff, simplify, Symbol, oo, E
+
 from gauss.parse import to_sympy
 from gauss.rendering import save_as_png
 from gauss._physicists import PHYSICISTS
+from gauss.utils import load_obj, save_obj
+
 import discord
+
 PREVIEWS = join(__file__[:-8], '_previews')
+OBJS = join(__file__[:-8], 'obj')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 X = Symbol('X')
 GAUSSIAN_INTEGRAL = Integral(E ** (-X ** 2), (X, -oo, oo))
-GREETINGS = {
-    "KENO": "Moin, geiler Macker",
-    "MIKE": "Oh, it's Euler! Our battle will be legendary!",
-    "GLENN": "Oh, der Herr Axiomsmeister! Das erinnert mich an die"
-             " Zeit, als ich zeigte, dass das Parallelenproblem"
-             " unlösbar ist.",
-    "TOMMY": "Ah, der Oberbagauner beehrt mich also auch.",
-    "JEREMY": "做你的事",
-    "TARO": "Mich crasht du nicht noch einmal!",
-    "HENRI": "Aha, der Herr Prof. Dr.Renzelmann beehrt mich also auch.",
-    "HELMUT": "Moin, Helmut."
-}
 NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
                             " Variablen verwenden?! Für welche von denen " \
                             "soll ich das denn integrieren?\n Such dir eine" \
@@ -39,9 +31,10 @@ def greet(message):
     :return: The appropriate response
     :rtype: str
     """
+    greetings = load_obj(join(OBJS, "greetings.pkl"))
     for physicist in PHYSICISTS.keys():
         if message.author.id == PHYSICISTS[physicist]:
-            response = GREETINGS[physicist]
+            response = greetings[physicist]
             break
     else:
         try:
@@ -49,6 +42,37 @@ def greet(message):
         except UnicodeEncodeError:
             response = "Hi"
     return message.channel.send(response)
+
+
+def set_greeting(message):
+    """
+    Changes the build in greeting to a custom greeting.
+
+    :param message: A discord text message containing 'set greeting'.
+    :type message: :class:`discord.message.Message`
+    """
+    greetings = load_obj(join(OBJS, "greetings.pkl"))
+
+    for physicist in PHYSICISTS.keys():
+        if physicist in message.content:
+            key = physicist
+            greetings[key] = message.content.replace(key, '').split(
+                "set greeting")[1].strip()
+            break
+    else:
+        for name, identity in PHYSICISTS.items():
+            if message.author.id == identity:
+                key = name
+                greetings[key] = message.content.split(
+                    "set greeting")[1].strip()
+                break
+        else:
+            return message.channel.send("Dafür kennen wir uns noch nicht gut "
+                                        "genug.")
+
+    save_obj(greetings, join(OBJS, "greetings.pkl"))
+    return message.channel.send("Ich habe die neue Begrüßung als: '{}' "
+                                "gesetzt".format(greetings[key]))
 
 
 def pay_respect(message):
@@ -163,7 +187,7 @@ def _find_intvar(message):
         if found the integration variable else None.
     :rtype: tuple
     """
-    variable_declarer = ['d', ',', 'with respect to']
+    variable_declarer = [',', 'with respect to', 'd']
 
     for delimiter in variable_declarer:
         if delimiter in message:

@@ -156,3 +156,197 @@ Traceback (most recent call last):
     return message.channel.send("{:.8E}".format(calculation))
 TypeError: unsupported format string passed to Mul.__format__
 
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 79, in on_message
+    if message.attachments.first():
+AttributeError: 'list' object has no attribute 'first'
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 47, in to_sympy
+    return N(parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 47, in to_sympy
+    return N(parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 47, in to_sympy
+    return N(parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 79, in on_message
+    if message.attachments.first():
+AttributeError: 'list' object has no attribute 'first'
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 79, in on_message
+    if message.attachments.first():
+AttributeError: 'list' object has no attribute 'first'
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 47, in to_sympy
+    return N(parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 43, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 43, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 82, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 44, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 101, in do_integration
+    _save_input(integrand, intvar, limits=limits)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 214, in _save_input
+    save_as_png(Integral(integrand, intvar), VIEW_INPUT)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\integrals\integrals.py", line 87, in __new__
+    obj = AddWithLimits.__new__(cls, function, *symbols, **assumptions)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\concrete\expr_with_limits.py", line 494, in __new__
+    pre = _common_new(cls, function, *symbols, **assumptions)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\concrete\expr_with_limits.py", line 48, in _common_new
+    limits, orientation = _process_limits(*symbols)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\concrete\expr_with_limits.py", line 156, in _process_limits
+    raise ValueError('Invalid limits given: %s' % str(symbols))
+ValueError: Invalid limits given: (I*H*d*n*o*s*exp(3),)
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 80, in do_integration
+    integrand, limits = _sep_integrand(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 147, in _sep_integrand
+    integrand = to_sympy(integral.split('from')[0])
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 44, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 59, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 80, in do_integration
+    integrand, limits = _sep_integrand(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 147, in _sep_integrand
+    integrand = to_sympy(integral.split('from')[0])
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 44, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1008, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 902, in eval_expr
+    expr = eval(
+  File "<string>", line 0
+    
+    ^
+SyntaxError: unexpected EOF while parsing
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 55, in on_message
+    set_greeting(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 58, in set_greeting
+    if message.user.id == identity:
+AttributeError: 'Message' object has no attribute 'user'
+
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 55, in on_message
+    await set_greeting(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 75, in set_greeting
+    "gesetzt".format(greetings[key]))
+NameError: name 'greeting' is not defined
+

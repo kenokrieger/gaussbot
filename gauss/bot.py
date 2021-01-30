@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from gauss.coordinator import is_valid, find_task
 from gauss.parse import to_sympy
 from gauss.brain import greet, do_integration, pay_respect, show_latex, \
-    integration_was_successful, do_calculation
+    integration_was_successful, do_calculation, set_greeting
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
@@ -51,10 +51,15 @@ class GaussBot(discord.Client):
             task = find_task(message)
             if task == "greet":
                 await greet(message)
+            elif task == "set greeting":
+                await set_greeting(message)
             elif task == "pay respect":
                 await pay_respect(message)
             elif task == "show":
                 await show_latex(message)
+            elif task == "calc":
+                await do_calculation(message)
+
             elif task == "integrate":
                 response = do_integration(message)
                 if not integration_was_successful(response):
@@ -73,11 +78,7 @@ class GaussBot(discord.Client):
                 await message.channel.send(
                     'TRIVIAL!',
                     file=discord.File(VIEW_OUTPUT))
-            elif task == "calc":
-                await do_calculation(message)
-            else:
-                if message.attachments.first():
-                    print(message.attachments.first().filename)
+
         except:
             err_msg = traceback.format_exc()
             with open("log.txt", 'a') as f:

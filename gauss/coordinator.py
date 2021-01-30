@@ -4,7 +4,7 @@ import discord
 VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht"]
 GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey", "Ni hao", "privjet",
                      "Konnichiwa", "Bonjour", "привет", "こんいちわ", "こんにちは",
-                     ]
+                     "Это отлично!"]
 
 
 def is_valid(message):
@@ -36,6 +36,9 @@ def find_task(message):
     :return: The task to be performed and the message.
     :rtype: tuple
     """
+    if "set greeting" in message.content:
+        return "set greeting"
+
     for greeting_keyword in GREETING_KEYWORDS:
         if greeting_keyword in message.content.lower():
             return "greet"
@@ -51,3 +54,6 @@ def find_task(message):
 
     if "calc" in message.content:
         return "calc"
+
+    if "set greeting" in message.content:
+        return "set greeting"

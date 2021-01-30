@@ -38,7 +38,8 @@ def to_sympy(message, numerical=False):
                         split_symbols)
                        )
 
-    custom_variables = {"inf": oo, "lol": Symbol("lol"), "e": E, "i": I}
+    custom_variables = {"inf": oo, "lol": Symbol("lol"), "i": I, "e": E,
+                        "deineHose": Symbol("deineHose")}
     if not numerical:
         return parse_expr(message, transformations=transformations,
                           local_dict=custom_variables)
