@@ -80,7 +80,7 @@
 <dd><p>Coordinates what happens once a message is received.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – The content of the message.</p>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -97,6 +97,35 @@
 <div class="section" id="module-brain">
 <span id="brain"></span><h2>brain<a class="headerlink" href="#module-brain" title="Permalink to this headline">¶</a></h2>
 <p>This is where all useful functions for the gauss bot are located</p>
+<dl class="py function">
+<dt id="brain.declare_custom_variable">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">declare_custom_variable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.declare_custom_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a custom variable name to the dict for sympy’s parsing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing ‘declare var’.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The answer to send.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.do_calculation">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_calculation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_calculation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the given input into a float number and sends it back to the
+user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing something to evaluate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The message to send.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt id="brain.do_derivation">
 <code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_derivation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_derivation" title="Permalink to this definition">¶</a></dt>
@@ -156,6 +185,17 @@ returned response</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.set_greeting">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">set_greeting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.set_greeting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the build in greeting to a custom greeting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing ‘set greeting’.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -223,7 +263,7 @@ sent by a bot</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expr</strong> (<em>sympy.core</em><em> or </em><em>latex str</em>) – A sympy expression that shall be displayed.</p></li>
 <li><p><strong>filename</strong> (<em>str</em><em> or </em><em>path</em>) – The path where the figure will be saved to.</p></li>
-<li><p><strong>is_latex</strong> – Specifies whether the string is already in latex format or
+<li><p><strong>is_latex</strong> (<em>bool</em>) – Specifies whether the string is already in latex format or
 needs to be parsed.</p></li>
 <li><p><strong>dpi</strong> (<em>int</em>) – The resolution of the image in dots per inch</p></li>
 </ul>
@@ -237,12 +277,16 @@ needs to be parsed.</p></li>
 <p>Contains all the necessary parsers for discord messages</p>
 <dl class="py function">
 <dt id="parse.to_sympy">
-<code class="sig-prename descclassname">parse.</code><code class="sig-name descname">to_sympy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse.to_sympy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">parse.</code><code class="sig-name descname">to_sympy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">numerical</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse.to_sympy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a string containing mathematical expressions into sympy syntax.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – A string (usually a discord text message) containing a
-mathematical expression.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – A string (usually a discord text message) containing a
+mathematical expression.</p></li>
+<li><p><strong>numerical</strong> (<em>bool</em>) – States whether the solution shall be computed
+analytically or numerically.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The parsed expression.</p>

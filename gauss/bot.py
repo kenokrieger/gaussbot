@@ -3,12 +3,14 @@ from os.path import join
 import traceback
 
 import discord
+
 from dotenv import load_dotenv
 
 from gauss.coordinator import is_valid, find_task
 from gauss.parse import to_sympy
 from gauss.brain import greet, do_integration, pay_respect, show_latex, \
-    integration_was_successful, do_calculation, set_greeting
+    integration_was_successful, do_calculation, set_greeting,\
+    declare_custom_variable
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
@@ -29,13 +31,15 @@ class GaussBot(discord.Client):
         """Searches for the bot connections on start"""
         guild = discord.utils.get(self.guilds, name=GUILD)
         print('{} is connected to {}'.format(self.user, guild.name))
+        await self.change_presence(activity=discord.Game(
+            name="Integral solving 101"))
 
     async def on_message(self, message):
         """
         Coordinates what happens once a message is received.
 
-        :param message: The content of the message.
-        :type message: str
+        :param message: A discord text message.
+        :type message: :class:`discord.message.Message`
         """
         with open('discord_IDs.txt', 'a') as f:
             try:
@@ -59,6 +63,8 @@ class GaussBot(discord.Client):
                 await show_latex(message)
             elif task == "calc":
                 await do_calculation(message)
+            elif task == "set var":
+                await declare_custom_variable(message)
 
             elif task == "integrate":
                 response = do_integration(message)

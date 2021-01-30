@@ -39,6 +39,9 @@ def find_task(message):
     if "set greeting" in message.content:
         return "set greeting"
 
+    if "declare var" in message.content:
+        return "set var"
+
     for greeting_keyword in GREETING_KEYWORDS:
         if greeting_keyword in message.content.lower():
             return "greet"

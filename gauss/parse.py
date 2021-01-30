@@ -1,8 +1,13 @@
 """Contains all the necessary parsers for discord messages"""
+from os.path import join
+
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, \
     implicit_multiplication_application, convert_xor, split_symbols
 from sympy import Symbol, E, I, oo, N
 
+from gauss.utils import load_obj
+
+VARPATH = join(__file__[:-8], "obj/custom_vars.pkl")
 CONSTANTS = {
     'c': 299792458,
     'e': 1.602176634e-19,
@@ -38,8 +43,7 @@ def to_sympy(message, numerical=False):
                         split_symbols)
                        )
 
-    custom_variables = {"inf": oo, "lol": Symbol("lol"), "i": I, "e": E,
-                        "deineHose": Symbol("deineHose")}
+    custom_variables = load_obj(VARPATH)
     if not numerical:
         return parse_expr(message, transformations=transformations,
                           local_dict=custom_variables)

@@ -71,8 +71,9 @@ def set_greeting(message):
                                         "genug.")
 
     save_obj(greetings, join(OBJS, "greetings.pkl"))
-    return message.channel.send("Ich habe die neue Begrüßung als: '{}' "
-                                "gesetzt".format(greetings[key]))
+    return message.channel.send("Ich habe die neue Begrüßung für {} als: '{}' "
+                                "gesetzt".format(key.capitalize(),
+                                                 greetings[key]))
 
 
 def pay_respect(message):
@@ -83,6 +84,23 @@ def pay_respect(message):
     :rtype: str
     """
     return message.channel.send('F')
+
+
+def declare_custom_variable(message):
+    """
+    Add a custom variable name to the dict for sympy's parsing.
+
+    :param message: A discord text message containing 'declare var'.
+    :type message: :class:`discord.message.Message`
+    :return: The answer to send.
+    """
+    custom_variables = load_obj(join(OBJS, "custom_vars.pkl"))
+    message_content = message.content.split("declare var")[1]
+    custom_variable = "".join(message_content.split())
+    custom_variables[custom_variable] = Symbol(custom_variable)
+    save_obj(custom_variables, join(OBJS, "custom_vars.pkl"))
+    return message.channel.send("Ich habe {} in meinen Wortschatz"
+                                " aufgenommen".format(custom_variable))
 
 
 def do_integration(message, response=None):
