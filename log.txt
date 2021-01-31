@@ -350,3 +350,18 @@ Traceback (most recent call last):
     "gesetzt".format(greetings[key]))
 NameError: name 'greeting' is not defined
 
+Traceback (most recent call last):
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\bot.py", line 70, in on_message
+    response = do_integration(message)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\brain.py", line 127, in do_integration
+    integrand = to_sympy(integral)
+  File "C:\Users\KenoK\PycharmProjects\gaussbot\gauss\parse.py", line 48, in to_sympy
+    return parse_expr(message, transformations=transformations,
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 1003, in parse_expr
+    code = stringify_expr(s, local_dict, global_dict, transformations)
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\site-packages\sympy\parsing\sympy_parser.py", line 887, in stringify_expr
+    for toknum, tokval, _, _, _ in generate_tokens(input_code.readline):
+  File "C:\Users\KenoK\Anaconda3\envs\gaussbot\lib\tokenize.py", line 521, in _tokenize
+    raise TokenError("EOF in multi-line statement", (lnum, 0))
+tokenize.TokenError: ('EOF in multi-line statement', (2, 0))
+

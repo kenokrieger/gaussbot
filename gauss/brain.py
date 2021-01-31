@@ -1,6 +1,6 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
-from sympy import integrate, Integral, diff, simplify, Symbol, oo, E
+from sympy import integrate, Integral, diff, simplify, Symbol, oo, E, Add
 
 from gauss.parse import to_sympy
 from gauss.rendering import save_as_png
@@ -97,6 +97,9 @@ def declare_custom_variable(message):
     custom_variables = load_obj(join(OBJS, "custom_vars.pkl"))
     message_content = message.content.split("declare var")[1]
     custom_variable = "".join(message_content.split())
+
+    if custom_variable in custom_variables.keys():
+        return message.channel.send("Diese Variable kenne ich schon.")
     custom_variables[custom_variable] = Symbol(custom_variable)
     save_obj(custom_variables, join(OBJS, "custom_vars.pkl"))
     return message.channel.send("Ich habe {} in meinen Wortschatz"
@@ -232,7 +235,8 @@ def _integration(integrand, variable, limits=None):
 
     """
     if limits is None:
-        result = integrate(integrand, variable)
+        result = Add(integrate(integrand, variable),
+                     Symbol("C", commutative=False))
     else:
         result = integrate(integrand, (variable, limits[0], limits[1]))
     save_as_png(result, VIEW_OUTPUT)
