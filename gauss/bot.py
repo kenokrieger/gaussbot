@@ -10,7 +10,7 @@ from gauss.coordinator import is_valid, find_task
 from gauss.parse import to_sympy
 from gauss.brain import greet, do_integration, pay_respect, show_latex, \
     integration_was_successful, do_calculation, set_greeting,\
-    declare_custom_variable
+    declare_custom_variable, send_meme, add_meme, remove_meme
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
@@ -65,6 +65,12 @@ class GaussBot(discord.Client):
                 await do_calculation(message)
             elif task == "set var":
                 await declare_custom_variable(message)
+            elif task == "send meme":
+                await send_meme(message)
+            elif task == "add meme":
+                await add_meme(message)
+            elif task == "remove meme":
+                await remove_meme(message)
 
             elif task == "integrate":
                 response = do_integration(message)

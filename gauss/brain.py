@@ -1,6 +1,7 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
 from sympy import integrate, Integral, diff, simplify, Symbol, oo, E, Add
+from random import randint
 
 from gauss.parse import to_sympy
 from gauss.rendering import save_as_png
@@ -9,16 +10,19 @@ from gauss.utils import load_obj, save_obj
 
 import discord
 
+ADMINS = [PHYSICISTS["KENO"]]
 PREVIEWS = join(__file__[:-8], '_previews')
 OBJS = join(__file__[:-8], 'obj')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 X = Symbol('X')
 GAUSSIAN_INTEGRAL = Integral(E ** (-X ** 2), (X, -oo, oo))
+
 NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
                             " Variablen verwenden?! Für welche von denen " \
                             "soll ich das denn integrieren?\n Such dir eine" \
                             " aus: {}"
+NO_ADMIN_ERRMSG = "Dafür musst du ein geiler Macker sein"
 
 
 def greet(message):
@@ -54,7 +58,7 @@ def set_greeting(message):
     greetings = load_obj(join(OBJS, "greetings.pkl"))
 
     for physicist in PHYSICISTS.keys():
-        if physicist in message.content:
+        if physicist in message.content and message.author.id in ADMINS:
             key = physicist
             greetings[key] = message.content.replace(key, '').split(
                 "set greeting")[1].strip()
@@ -143,7 +147,7 @@ def do_integration(message, response=None):
         limits = response["limits"]
     if _is_gaussian_integral(integrand, intvar, limits):
         return {"gauss": True}
-    _save_input(integrand, intvar, limits=limits)
+    _save_integral_input(integrand, intvar, limits=limits)
     _integration(integrand, intvar, limits)
 
 
@@ -154,6 +158,15 @@ def integration_was_successful(response):
 
 
 def _is_gaussian_integral(integrand, intvar, limits):
+    """
+    Compares the input integral to the gaussian integral by subtracting
+    both.
+
+    :param integrand: The integrand of the integral.
+    :param intvar: The integration variable.
+    :param limits: The limits of the integral.
+    :return: True for the gaussian integral False otherwise.
+    """
     if limits is None:
         return False
     current_integral = Integral(integrand, (intvar, limits[0], limits[1]))
@@ -242,7 +255,7 @@ def _integration(integrand, variable, limits=None):
     save_as_png(result, VIEW_OUTPUT)
 
 
-def _save_input(integrand, intvar, limits=None):
+def _save_integral_input(integrand, intvar, limits=None):
     """
     Saves the given input as a png.
 
@@ -284,6 +297,62 @@ def do_calculation(message):
     calculation_part = message.content.split("calc")[1]
     calculation = to_sympy(calculation_part, numerical=True)
     return message.channel.send("{:.8E}".format(calculation))
+
+
+def send_meme(message):
+    """
+    Sends a meme from a list of meme links
+
+    :param message: A discord text message containing the word meme.
+    :type message: :class:`discord.message.Message`
+    :return: The message to send.
+    """
+    memes = load_obj(join(OBJS, "memes.pkl"))
+    meme = memes[randint(0, len(memes) - 1)]
+    return message.channel.send(meme)
+
+
+def add_meme(message):
+    """
+    Adds a meme to the list of memes.
+
+    :param message: A discord text message containing the word meme.
+    :type message: :class:`discord.message.Message`
+    :return: The messages to send.
+    :rtype: tuple
+    """
+    save_file_path = join(OBJS, "memes.pkl")
+    memes = load_obj(save_file_path)
+    meme_path = message.content.split("add meme")[1].strip()
+    memes.append(meme_path)
+    save_obj(memes, save_file_path)
+    msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
+    return message.channel.send(msg + meme_path)
+
+
+def remove_meme(message):
+    """
+    Adds a meme to the list of memes.
+
+    :param message: A discord text message containing the word meme.
+    :type message: :class:`discord.message.Message`
+    :return: The messages to send.
+    :rtype: tuple
+    """
+    if message.author.id not in ADMINS:
+        return message.channel.send(NO_ADMIN_ERRMSG)
+    save_file_path = join(OBJS, "memes.pkl")
+    memes = load_obj(save_file_path)
+    meme_path = message.content.split("remove meme")[1].strip()
+    try:
+        wrong_meme_index = memes.index(meme_path)
+    except ValueError:
+        return message.channel.send("Das Meme kenne ich gar nicht.")
+    else:
+        del memes[wrong_meme_index]
+    save_obj(memes, save_file_path)
+    msg = "Ich habe das Meme aus meiner Sammlung entfernt"
+    return message.channel.send(msg)
 
 
 def do_derivation(message):

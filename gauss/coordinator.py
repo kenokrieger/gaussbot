@@ -60,3 +60,12 @@ def find_task(message):
 
     if "set greeting" in message.content:
         return "set greeting"
+
+    if "gauss" in message.content and "send meme" in message.content:
+        return "send meme"
+
+    if "gauss" in message.content and "add meme" in message.content:
+        return "add meme"
+
+    if "gauss" in message.content and "remove meme" in message.content:
+        return "remove meme"
