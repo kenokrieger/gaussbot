@@ -6,16 +6,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API-Documentation &#8212; GaussBot  documentation</title>
-    <link rel="stylesheet" href="static/bootstrap-astropy.css" type="text/css" />
-    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="./" src="static/documentation_options.js"></script>
-    <script src="static/jquery.js"></script>
-    <script src="static/underscore.js"></script>
-    <script src="static/doctools.js"></script>
-    <script src="static/language_data.js"></script>
-    <script type="text/javascript" src="static/sidebar.js"></script>
-    <script type="text/javascript" src="static/copybutton.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Documentation" href="index.html" />
@@ -98,6 +98,20 @@
 <span id="brain"></span><h2>brain<a class="headerlink" href="#module-brain" title="Permalink to this headline">¶</a></h2>
 <p>This is where all useful functions for the gauss bot are located</p>
 <dl class="py function">
+<dt id="brain.add_meme">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">add_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.add_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a meme to the list of memes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing the word meme.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The message to send.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="brain.declare_custom_variable">
 <code class="sig-prename descclassname">brain.</code><code class="sig-name descname">declare_custom_variable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.declare_custom_variable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a custom variable name to the dict for sympy’s parsing.</p>
@@ -109,6 +123,13 @@
 <dd class="field-even"><p>The answer to send.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.differentiation_was_successful">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">differentiation_was_successful</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.differentiation_was_successful" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the derivation was successful or not by observing the
+returned response.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -127,11 +148,18 @@ user.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="brain.do_derivation">
-<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_derivation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_derivation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Derivates an expression.
-:param message:
-:return:</p>
+<dt id="brain.do_differentiation">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">do_differentiation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">response</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.do_differentiation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derivates an expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing an expression to
+differentiate.</p></li>
+<li><p><strong>response</strong> (<em>dict</em>) – Supplied if a previous differentiation failed.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -162,9 +190,6 @@ the users id.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The appropriate response</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -183,10 +208,41 @@ returned response</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Respect</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.remove_meme">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">remove_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.remove_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a meme to the list of memes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing the word meme.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The messages to send.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.send_meme">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">send_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.send_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a meme from a list of meme links</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing the word meme.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The message to send.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.send_nudes">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">send_nudes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.send_nudes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two words: sexy Einstein</p>
 </dd></dl>
 
 <dl class="py function">
@@ -198,6 +254,12 @@ returned response</p>
 <dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">discord.message.Message</span></code>) – A discord text message containing ‘set greeting’.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="brain.show_help">
+<code class="sig-prename descclassname">brain.</code><code class="sig-name descname">show_help</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#brain.show_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a help message</p>
 </dd></dl>
 
 <dl class="py function">
@@ -322,7 +384,7 @@ analytically or numerically.</p></li>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="sources/api.rst.txt"
+      <li><a href="_sources/api.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -337,7 +399,7 @@ analytically or numerically.</p></li>
     </div>
 <footer class="footer">
   <p class="pull-right">
-    <a href="sources/api.rst.txt"
+    <a href="_sources/api.rst.txt"
        rel="nofollow">Page Source</a> &nbsp;
     <a href="#">Back to Top</a></p>
   <p>

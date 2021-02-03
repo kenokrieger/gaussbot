@@ -6,6 +6,6 @@ for file in os.listdir('.'):
             content = f.read()
 
         with open(file, 'w') as f:
-            for private in ['_images', 'static', 'sources']:
+            for private in ["_images", 'static', 'sources']:
                 content = content.replace(private, private.replace('_', ''))
             f.write(content)
