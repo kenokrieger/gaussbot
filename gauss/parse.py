@@ -3,7 +3,7 @@ from os.path import join
 
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, \
     implicit_multiplication_application, convert_xor, split_symbols
-from sympy import Symbol, E, I, oo, N
+from sympy import Symbol, E, I, oo, N  # imports are needed for the loaded dict
 
 from gauss.utils import load_obj
 

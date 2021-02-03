@@ -1,5 +1,6 @@
 """This is where all useful functions for the gauss bot are located"""
 from os.path import join
+import codecs
 from sympy import integrate, Integral, diff, simplify, Symbol, oo, E, Add
 from random import randint
 
@@ -17,12 +18,23 @@ VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 X = Symbol('X')
 GAUSSIAN_INTEGRAL = Integral(E ** (-X ** 2), (X, -oo, oo))
-
+SEXY_EINSTEIN = "https://i.redd.it/hcumvmngjto11.jpg"
 NO_INTVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
                             " Variablen verwenden?! Für welche von denen " \
                             "soll ich das denn integrieren?\n Such dir eine" \
                             " aus: {}"
+NO_DIFFVAR_DECLARED_ERRMSG = "Meine Güte willst du vielleicht noch mehr" \
+                            " Variablen verwenden?! Für welche von denen " \
+                            "soll ich das denn ableiten?\n Such dir eine" \
+                            " aus: {}"
 NO_ADMIN_ERRMSG = "Dafür musst du ein geiler Macker sein"
+
+
+def show_help(message):
+    """Sends a help message"""
+    with codecs.open(join(__file__[:-8], "help/commands.txt"), 'r', "utf-8") as f:
+        msg = f.read()
+    return message.channel.send(msg)
 
 
 def greet(message):
@@ -33,7 +45,6 @@ def greet(message):
     :param message: A discord message containing a greeting.
     :type message: :class:`discord.message.Message`
     :return: The appropriate response
-    :rtype: str
     """
     greetings = load_obj(join(OBJS, "greetings.pkl"))
     for physicist in PHYSICISTS.keys():
@@ -85,7 +96,6 @@ def pay_respect(message):
     F in the chat
 
     :return: Respect
-    :rtype: str
     """
     return message.channel.send('F')
 
@@ -318,15 +328,17 @@ def add_meme(message):
 
     :param message: A discord text message containing the word meme.
     :type message: :class:`discord.message.Message`
-    :return: The messages to send.
-    :rtype: tuple
+    :return: The message to send.
     """
     save_file_path = join(OBJS, "memes.pkl")
     memes = load_obj(save_file_path)
     meme_path = message.content.split("add meme")[1].strip()
-    memes.append(meme_path)
-    save_obj(memes, save_file_path)
-    msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
+    if meme_path not in memes:
+        memes.append(meme_path)
+        save_obj(memes, save_file_path)
+        msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
+    else:
+        msg = "Das kenne ich schon."
     return message.channel.send(msg + meme_path)
 
 
@@ -337,7 +349,6 @@ def remove_meme(message):
     :param message: A discord text message containing the word meme.
     :type message: :class:`discord.message.Message`
     :return: The messages to send.
-    :rtype: tuple
     """
     if message.author.id not in ADMINS:
         return message.channel.send(NO_ADMIN_ERRMSG)
@@ -355,26 +366,74 @@ def remove_meme(message):
     return message.channel.send(msg)
 
 
-def do_derivation(message):
+def do_differentiation(message, response=None):
     """
     Derivates an expression.
-    :param message:
-    :return:
+
+    :param message: A discord text message containing an expression to
+        differentiate.
+    :type message: :class:`discord.message.Message`
+    :param response: Supplied if a previous differentiation failed.
+    :type response: dict
     """
-    deriv = message.split('diff')[1]
-    derivative = to_sympy(deriv)
-    variables = derivative.free_symbols
+    if response is None:
+        diff_part = message.content.split("diff")[1]
+        diff_expr, diff_var = _find_diffvar(diff_part)
 
-    if len(variables) > 1:
-        return False, derivative
+        if diff_var is None:
+            variables = diff_expr.free_symbols
+
+            if len(variables) > 1:
+                question = NO_DIFFVAR_DECLARED_ERRMSG.format(variables)
+                response = {"raise": message.channel.send(question),
+                            "diff_expr": diff_expr}
+                return response
+            else:
+                (diff_var,) = variables
     else:
-        (var, ) = variables
-    solution = diff(derivative, var)
-    return True, solution
+        diff_expr = response["diff_expr"]
+        diff_var = response["diff_var"]
+    save_as_png(diff_expr, VIEW_INPUT)
+    _differentiate(diff_expr, diff_var)
 
 
-def do_derivation_again(derivative, var):
-    return diff(derivative, to_sympy(var))
+def _find_diffvar(diff_part):
+    """
+    Finds the variable to differentiate and expression for.
+
+    :param diff_part: A string that contains an expression to differentiate.
+    :type diff_part: str
+    :return: The expression to differentiate and the variable for which to
+        differentiate if found else returns None.
+    :rtype: tuple
+    """
+    delimiters = [',', "with respect to"]
+    for delimiter in delimiters:
+        if delimiter in diff_part:
+            split_diff = diff_part.split(delimiter)
+            return to_sympy(split_diff[0]), to_sympy(split_diff[1])
+    return to_sympy(diff_part), None
 
 
+def _differentiate(expr, var):
+    """
+    Differentiates a given expression and saves the result as a png.
 
+    :param expr: A sympy expression to differentiate
+    :type expr: sympy.core
+    :param var: The variable to differentiate for.
+    :type var: sympy.core
+    """
+    save_as_png(diff(expr, var), VIEW_OUTPUT)
+
+
+def differentiation_was_successful(response):
+    """Checks whether the derivation was successful or not by observing the
+    returned response.
+    """
+    return True if response is None else False
+
+
+def send_nudes(message):
+    """Two words: sexy Einstein"""
+    return message.channel.send(SEXY_EINSTEIN)

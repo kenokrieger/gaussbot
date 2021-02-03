@@ -10,7 +10,8 @@ from gauss.coordinator import is_valid, find_task
 from gauss.parse import to_sympy
 from gauss.brain import greet, do_integration, pay_respect, show_latex, \
     integration_was_successful, do_calculation, set_greeting,\
-    declare_custom_variable, send_meme, add_meme, remove_meme
+    declare_custom_variable, send_meme, add_meme, remove_meme, show_help, \
+    send_nudes, do_differentiation, differentiation_was_successful
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
@@ -18,10 +19,8 @@ GUILD = getenv("DISCORD_GUILD")
 PREVIEWS = join(__file__[:-6], '_previews')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
-GAUSSIAN_INTEGRAL_MSG = "Mhh, das ist ein schwerer Brocken. Ein guter " \
-                        "Mathematiker könnte dir damit vielleicht " \
-                        "weiterhelfen\n Ich habe gehört, daraus ein " \
-                        "zweidimensionales Integral zu machen soll helfen."
+GAUSSIAN_INTEGRAL_MSG = "Also wenn du das nicht kennst, " \
+                        "kann ich dir auch nicht helfen."
 
 
 class GaussBot(discord.Client):
@@ -53,6 +52,8 @@ class GaussBot(discord.Client):
 
         try:
             task = find_task(message)
+            if task == "show help":
+                await show_help(message)
             if task == "greet":
                 await greet(message)
             elif task == "set greeting":
@@ -71,7 +72,8 @@ class GaussBot(discord.Client):
                 await add_meme(message)
             elif task == "remove meme":
                 await remove_meme(message)
-
+            elif task == "send nudes":
+                await send_nudes(message)
             elif task == "integrate":
                 response = do_integration(message)
                 if not integration_was_successful(response):
@@ -91,6 +93,20 @@ class GaussBot(discord.Client):
                     'TRIVIAL!',
                     file=discord.File(VIEW_OUTPUT))
 
+            elif task == "differentiate":
+                response = do_differentiation(message)
+                if not differentiation_was_successful(response):
+                    await response["raise"]
+                    answer = await self.wait_for('message')
+                    response["intvar"] = to_sympy(answer.content)
+                    do_differentiation(message, response=response)
+
+                await message.channel.send(
+                    'Das habe ich ja schon mit fünf abgeleitet!',
+                    file=discord.File(VIEW_INPUT))
+                await message.channel.send(
+                    'TRIVIAL!',
+                    file=discord.File(VIEW_OUTPUT))
         except:
             err_msg = traceback.format_exc()
             with open("log.txt", 'a') as f:

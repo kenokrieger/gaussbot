@@ -36,15 +36,23 @@ def find_task(message):
     :return: The task to be performed and the message.
     :rtype: tuple
     """
+    if "gauss" not in message.content.lower():
+        return ""
+
+    if "help" in message.content:
+        return "show help"
+
     if "set greeting" in message.content:
         return "set greeting"
 
+    if "add meme" in message.content:
+        return "add meme"
+
+    if "remove meme" in message.content:
+        return "remove meme"
+
     if "declare var" in message.content:
         return "set var"
-
-    for greeting_keyword in GREETING_KEYWORDS:
-        if greeting_keyword in message.content.lower():
-            return "greet"
 
     if "integrate" in message.content:
         return "integrate"
@@ -58,14 +66,14 @@ def find_task(message):
     if "calc" in message.content:
         return "calc"
 
-    if "set greeting" in message.content:
-        return "set greeting"
+    if "diff" in message.content:
+        return "differentiate"
 
-    if "gauss" in message.content and "send meme" in message.content:
+    if "send meme" in message.content:
         return "send meme"
 
-    if "gauss" in message.content and "add meme" in message.content:
-        return "add meme"
-
-    if "gauss" in message.content and "remove meme" in message.content:
-        return "remove meme"
+    if "send nudes" in message.content:
+        return "send nudes"
+    for greeting_keyword in GREETING_KEYWORDS:
+        if greeting_keyword in message.content.lower():
+            return "greet"

@@ -1,0 +1,47 @@
+Gauss reagiert auf Nachrichten, die mit *gauss* beginnen.
+Mögliche Befehle:
+
+- **integrate** <expr> *from* <optional> *to* <optional> d<optional>
+
+    Gibt das Integral des Ausdruckes <expr> zurück. Grenzen können über die
+    Verwendung von 'from' 'to' angegeben werden. Die Integrationsvariable
+    kann über 'd<var>', ', <var>' oder 'with respect to <var>' spezifiziert
+    werden.
+    Es können nur einzelne Buchstaben als Variablen verwendet werden, sofern
+    nicht anders deklariert (siehe 'declare var'). 'e', 'i' und 'd' sind
+    dabei schon intern belegt (eulersche Zahl, imaginäre Einheit, Integrations-
+    variable).
+
+- **diff** <expr> with respect to <optional>
+
+    Gibt die Ableitung eines Ausdruckes zurück. Die Variable nach der abge-
+    leitet werden soll kann mit ', <var>' oder 'with respect to <var>'
+    spezifiziert werden.
+    Es können nur einzelne Buchstaben als Variablen verwendet werden, sofern
+    nicht anders deklariert (siehe 'declare var'). 'e' und 'i' sind
+    dabei schon intern belegt (eulersche Zahl, imaginäre Einheit).
+
+- **declare var** <var>
+
+    Ergänzt die genannte Variable <var> zum internen Wortschatz.
+
+- **calc** <expr>
+
+    Berechnet den gegebenen Ausdruck numerisch. Dabei sind die meisten
+    Naturkonstanten automatisch bekannt.
+
+- **show** <latex>
+
+    Stellt den latex code gerendert dar.
+
+- **set greeting** <greeting>
+
+    Ermöglicht das Einstellen einer persönlichen Begrüßung <greeting>
+
+- **add meme** <meme-url.com>
+
+    Fügt ein Meme zur Sammlung hinzu.
+
+- **send meme**
+
+    Sendet ein zufälliges Meme aus der Sammlung
