@@ -53,31 +53,31 @@ async def do_task(bot, message):
         return
 
     if "help" in message.content:
-        await brain.show_help(message)
+        await brain.interactive.show_help(message)
     elif "add meme" in message.content:
-        await brain.add_meme(message)
+        await brain.memes.add_meme(message)
     elif "remove meme" in message.content:
-        await brain.remove_meme(message)
+        await brain.memes.remove_meme(message)
     elif "set greeting" in message.content:
-        await brain.set_greeting(message)
+        await brain.greetings.set_greeting(message)
     elif "declare var" in message.content:
-        await brain.declare_custom_variable(message)
+        await brain.interactive.declare_custom_variable(message)
     elif "integrate" in message.content:
         await _coordinate_integration(bot, message)
     elif "diff" in message.content:
         await _coordinate_differentiation(bot, message)
     elif "calc" in message.content:
-        await brain.do_calculation(message)
+        await brain.interactive.do_calculation(message)
     elif "show" in message.content:
-        await brain.show_latex(message)
+        await brain.interactive.show_latex(message)
     elif "send meme" in message.content:
-        await brain.send_meme(message)
+        await brain.memes.send_meme(message)
     elif "send nudes" in message.content:
-        await brain.send_nudes(message)
+        await brain.memes.send_nudes(message)
     elif message.content.lower() in ['rip', 'r.i.p.']:
-        await brain.pay_respect(message)
+        await brain.memes.pay_respect(message)
     elif any(greeting_keyword in message.content.lower() for greeting_keyword in GREETING_KEYWORDS):
-        await brain.greet(message)
+        await brain.greetings.greet(message)
     else:
         await message.channel.send(NO_TASK_FOUND_ERRMSG)
 
@@ -93,12 +93,12 @@ async def _coordinate_differentiation(bot, message):
     :param message: The message with the content to differentiate.
     :type message: :class:`discord.message.Message`
     """
-    response = brain.do_differentiation(message)
-    if not brain.differentiation_was_successful(response):
+    response = brain.differentiate.do_differentiation(message)
+    if not brain.differentiate.differentiation_was_successful(response):
         await response["raise"]
         answer = await bot.wait_for('message', check=check)
         response["diff_var"] = to_sympy(answer.content)
-        brain.do_differentiation(message, response=response)
+        brain.differentiate.do_differentiation(message, response=response)
     await message.channel.send(
         'Das habe ich ja schon mit fünf abgeleitet!',
         file=discord.File(VIEW_INPUT))
@@ -118,8 +118,8 @@ async def _coordinate_integration(bot, message):
     :param message: The message with the content to differentiate.
     :type message: :class:`discord.message.Message`
     """
-    response = brain.do_integration(message)
-    if not brain.integration_was_successful(response):
+    response = brain.integrate.do_integration(message)
+    if not brain.integrate.integration_was_successful(response):
         if response["gauss"]:
             await message.channel.send(GAUSSIAN_INTEGRAL_MSG)
             return
@@ -127,7 +127,7 @@ async def _coordinate_integration(bot, message):
             await response["raise"]
             answer = await bot.wait_for('message', check=check)
             response["intvar"] = to_sympy(answer.content)
-            brain.do_integration(message, response=response)
+            brain.integrate.do_integration(message, response=response)
     await message.channel.send(
         'Das Integral packst du nicht selber?!',
         file=discord.File(VIEW_INPUT))

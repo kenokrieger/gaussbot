@@ -5,7 +5,7 @@ import discord
 
 from dotenv import load_dotenv
 
-from gauss.coordinator import is_valid, do_task
+from gauss._coordinator import is_valid, do_task
 
 load_dotenv()
 TOKEN = getenv("DISCORD_TOKEN")
