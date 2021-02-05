@@ -49,7 +49,11 @@ def greet(message):
     greetings = load_obj(join(OBJS, "greetings.pkl"))
     for physicist in PHYSICISTS.keys():
         if message.author.id == PHYSICISTS[physicist]:
-            response = greetings[physicist]
+            if physicist in greetings.keys():
+                response = greetings[physicist]
+            else:
+                response = "Hi! Du kannst dir mit dem Befehl set greeting" \
+                           " eine persönliche Begrüßung einstellen."
             break
     else:
         try:
@@ -61,7 +65,7 @@ def greet(message):
 
 def set_greeting(message):
     """
-    Changes the build in greeting to a custom greeting.
+    Changes the build-in greeting to a custom greeting.
 
     :param message: A discord text message containing 'set greeting'.
     :type message: :class:`discord.message.Message`
@@ -318,8 +322,15 @@ def send_meme(message):
     :return: The message to send.
     """
     memes = load_obj(join(OBJS, "memes.pkl"))
+    recent_memes = load_obj(join(OBJS, "recent_memes.pkl"))
     meme = memes[randint(0, len(memes) - 1)]
-    return message.channel.send(meme)
+
+    if meme in recent_memes:
+        return send_meme(message)
+    else:
+        recent_memes = recent_memes[1:] + [meme]
+        save_obj(recent_memes, join(OBJS, "recent_memes.pkl"))
+        return message.channel.send(meme)
 
 
 def add_meme(message):

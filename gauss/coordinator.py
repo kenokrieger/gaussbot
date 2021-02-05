@@ -96,7 +96,7 @@ async def _coordinate_differentiation(bot, message):
     response = brain.do_differentiation(message)
     if not brain.differentiation_was_successful(response):
         await response["raise"]
-        answer = await bot.wait_for('message')
+        answer = await bot.wait_for('message', check=check)
         response["diff_var"] = to_sympy(answer.content)
         brain.do_differentiation(message, response=response)
     await message.channel.send(
@@ -125,7 +125,7 @@ async def _coordinate_integration(bot, message):
             return
         else:
             await response["raise"]
-            answer = await bot.wait_for('message')
+            answer = await bot.wait_for('message', check=check)
             response["intvar"] = to_sympy(answer.content)
             brain.do_integration(message, response=response)
     await message.channel.send(
@@ -134,3 +134,7 @@ async def _coordinate_integration(bot, message):
     await message.channel.send(
         'TRIVIAL!',
         file=discord.File(VIEW_OUTPUT))
+
+
+def check(message):
+    return not message.author.bot and len(message.content) < 10

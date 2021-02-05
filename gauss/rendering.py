@@ -30,7 +30,7 @@ def save_as_png(expr, filename, is_latex=False, dpi=300):
         text = r"$\displaystyle " + r'{}$'.format(expr)
     else:
         text = r'$\displaystyle {}$'.format(latex(expr))
-    fig = figure(facecolor=discord_background_color)
+    fig = figure()
     fig.text(0, 0, text, color="white")
-    fig.savefig(filename, dpi=dpi, bbox_inches='tight')
+    fig.savefig(filename, dpi=dpi, bbox_inches='tight', facecolor=discord_background_color)
     close()

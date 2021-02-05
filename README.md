@@ -25,34 +25,8 @@ copying and pasting the source code in your python directory.
 
 ### User
 
-#### Integration
-
-To integrate an expression, simply start of with 'integrate' followed by 
-the expression to integrate. You may also specify the integration
-variable *x* by 
-
-- specifying it with a d*x*
-
-- writing '*, x*' at the end of the integrand
-
-- or saying 'with respect to *x*'
-
-You can also specify the limits by including *from* *to* after the integrand.
-
-To list some examples:
-```
-integrate sin(x) du
-integrate cos(u) from 0 to pi
-integrate a**2 + b^2 - c, c
-integrate ax + b, x from 0 to b
-integrate exp(-r^2) from -pi to pi
-```
-
-#### Latex
-
-You can use the 'show' command to let gauss render a latex string for you, e.g.
-`show \int_{-\infty}^{\infty} e^{-x^2} dx`
-
+The bot may be invoked by typing a message starting with 'gauss' followed by
+the function you want to use. For an overview of the functions type 'gauss help'
 
 ### Host
 

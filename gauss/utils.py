@@ -1,5 +1,5 @@
 """Contains utility functions for the gauss package"""
-import pickle
+import pickle5 as pickle
 
 
 def save_obj(obj, filename):
