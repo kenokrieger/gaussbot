@@ -657,7 +657,7 @@
     return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
   };
 
-  // Invokes interceptor with the obj, and then returns obj.
+  // Invokes interceptor with the _obj, and then returns _obj.
   // The primary purpose of this method is to "tap into" a method chain, in
   // order to perform operations on intermediate results within the chain.
   _.tap = function(obj, interceptor) {
@@ -909,7 +909,7 @@
   _.template = function(str, data) {
     var c  = _.templateSettings;
     var tmpl = 'var __p=[],print=function(){__p.push.apply(__p,arguments);};' +
-      'with(obj||{}){__p.push(\'' +
+      'with(_obj||{}){__p.push(\'' +
       str.replace(/\\/g, '\\\\')
          .replace(/'/g, "\\'")
          .replace(c.escape || noMatch, function(match, code) {
@@ -925,7 +925,7 @@
          .replace(/\n/g, '\\n')
          .replace(/\t/g, '\\t')
          + "');}return __p.join('');";
-    var func = new Function('obj', '_', tmpl);
+    var func = new Function('_obj', '_', tmpl);
     if (data) return func(data, _);
     return function(data) {
       return func.call(this, data, _);

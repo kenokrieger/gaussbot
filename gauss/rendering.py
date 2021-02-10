@@ -13,7 +13,7 @@ rcParams.update(custom_preamble)
 
 def save_as_png(expr, filename, is_latex=False, dpi=300):
     """
-    Saves a sympy expression as a png with the help of matplotlib.
+    Saves a sympy expression as a png with the _help of matplotlib.
 
     :param expr: A sympy expression that shall be displayed.
     :type expr: sympy.core or latex str

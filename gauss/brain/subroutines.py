@@ -9,15 +9,18 @@ from gauss._utils import save_obj, load_obj
 
 import discord
 import codecs
+from datetime import datetime
+import time
 
 PREVIEWS = join(__file__.split("brain")[0], '_previews')
-OBJS = join(__file__.split("brain")[0], "obj")
+OBJS = join(__file__.split("brain")[0], "_obj")
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
+HELP = join(__file__.split("brain")[0], "_help/commands.txt")
 
 
 def show_help(message):
-    """Sends a help message"""
-    with codecs.open(join(__file__[:-8], "help/commands.txt"), 'r', "utf-8") as f:
+    """Sends a _help message"""
+    with codecs.open(HELP, 'r', "utf-8") as f:
         msg = f.read()
     return message.channel.send(msg)
 
@@ -66,3 +69,17 @@ def do_calculation(message):
     calculation_part = message.content.split("calc")[1]
     calculation = to_sympy(calculation_part, numerical=True)
     return message.channel.send("{:.8E}".format(calculation))
+
+
+def set_status(bot, message):
+    """
+    Set a new status message for the bot.
+
+    :param bot: The discord bot.
+    :type bot: :class: `discord.Client`
+    :param message: A discord text message.
+    :type message: :class:`discord.message.Message`
+    :return: The routine to change the status.
+    """
+    status = message.content.split("set status")[1].strip()
+    return bot.change_presence(activity=discord.Game(name=status))

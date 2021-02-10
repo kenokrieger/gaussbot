@@ -9,7 +9,7 @@ VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht"]
 GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey", "Ni hao", "privjet",
                      "Konnichiwa", "Bonjour", "привет", "こんいちわ", "こんにちは",
                      "Это отлично!"]
-PREVIEWS = join(__file__[:-14], '_previews')
+PREVIEWS = join(__file__[:-15], '_previews')
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 
@@ -53,29 +53,33 @@ async def do_task(bot, message):
         return
 
     if "help" in message.content:
-        await brain.interactive.show_help(message)
+        await brain.subroutines.show_help(message)
     elif "add meme" in message.content:
         await brain.memes.add_meme(message)
     elif "remove meme" in message.content:
         await brain.memes.remove_meme(message)
+    elif "set meme tag" in message.content:
+        await brain.memes.set_meme_tag(message)
     elif "set greeting" in message.content:
         await brain.greetings.set_greeting(message)
     elif "declare var" in message.content:
-        await brain.interactive.declare_custom_variable(message)
+        await brain.subroutines.declare_custom_variable(message)
     elif "integrate" in message.content:
         await _coordinate_integration(bot, message)
     elif "diff" in message.content:
         await _coordinate_differentiation(bot, message)
     elif "calc" in message.content:
-        await brain.interactive.do_calculation(message)
+        await brain.subroutines.do_calculation(message)
     elif "show" in message.content:
-        await brain.interactive.show_latex(message)
-    elif "send meme" in message.content:
+        await brain.subroutines.show_latex(message)
+    elif "send" in message.content and "meme" in message.content:
         await brain.memes.send_meme(message)
     elif "send nudes" in message.content:
         await brain.memes.send_nudes(message)
     elif message.content.lower() in ['rip', 'r.i.p.']:
         await brain.memes.pay_respect(message)
+    elif "set status" in message.content.lower():
+        await brain.subroutines.set_status(bot, message)
     elif any(greeting_keyword in message.content.lower() for greeting_keyword in GREETING_KEYWORDS):
         await brain.greetings.greet(message)
     else:
@@ -138,3 +142,7 @@ async def _coordinate_integration(bot, message):
 
 def check(message):
     return not message.author.bot and len(message.content) < 10
+
+
+def meme_check(message):
+    return "star" in message.content.lower()

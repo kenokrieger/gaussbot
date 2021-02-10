@@ -1,7 +1,7 @@
 """Contains functions for differentiating the content of a message"""
 from os.path import join
 
-from sympy import diff
+from sympy import diff, Derivative
 from gauss.rendering import save_as_png
 from gauss.parse import to_sympy
 
@@ -42,7 +42,7 @@ def do_differentiation(message, response=None):
     else:
         diff_expr = response["diff_expr"]
         diff_var = response["diff_var"]
-    save_as_png(diff_expr, VIEW_INPUT)
+    save_as_png(Derivative(diff_expr, diff_var), VIEW_INPUT)
     _differentiate(diff_expr, diff_var)
 
 

@@ -1,4 +1,4 @@
-import gauss.brain.interactive
+import gauss.brain.subroutines
 import gauss.brain.greetings
 import gauss.brain.integrate
 import gauss.brain.differentiate

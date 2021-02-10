@@ -7,7 +7,7 @@ from sympy import Symbol, E, I, oo, N  # imports are needed for the loaded dict
 
 from gauss._utils import load_obj
 
-VARPATH = join(__file__[:-8], "obj/custom_vars.pkl")
+VARPATH = join(__file__[:-8], "_obj/custom_vars.pkl")
 CONSTANTS = {
     'c': 299792458,
     'e': 1.602176634e-19,

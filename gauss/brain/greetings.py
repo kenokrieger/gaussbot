@@ -4,7 +4,7 @@ from os.path import join
 from gauss._utils import save_obj, load_obj
 from gauss._physicists import PHYSICISTS
 
-OBJS = join(__file__.split("brain")[0], "obj")
+OBJS = join(__file__.split("brain")[0], "_obj")
 
 ADMINS = [PHYSICISTS["KENO"]]
 NO_ADMIN_ERRMSG = "Dafür musst du ein geiler Macker sein"

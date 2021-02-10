@@ -41,7 +41,12 @@ class GaussBot(discord.Client):
 
         if not is_valid(message):
             return
-        await do_task(self, message)
+        tasks = do_task(self, message)
+        if isinstance(tasks, tuple):
+            for task in tasks:
+                await task
+        else:
+            await tasks
 
     async def error_log(self, message):
         err_msg = traceback.format_exc()
