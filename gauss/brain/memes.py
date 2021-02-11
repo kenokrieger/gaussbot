@@ -18,6 +18,28 @@ NO_ADMIN_ERRMSG = "Dafür musst du ein geiler Macker sein"
 SEXY_EINSTEIN = "https://i.redd.it/hcumvmngjto11.jpg"
 
 
+class Meme:
+    """Base class for memes"""
+    def __init__(self, url, author, name, tags):
+        self.url = url
+        self.author = author
+        self.rating = dict()
+        self.name = name
+        self.tags = tags
+
+    def get_author(self):
+        return self.author
+
+    def get_url(self):
+        return self.url
+
+    def get_rating(self):
+        return self.rating
+
+    def set_rating(self):
+
+
+
 def send_meme(message):
     """
     Sends a meme from a list of meme links
@@ -116,9 +138,12 @@ def remove_meme(message):
         try:
             wrong_meme_index = memes[tag].index(meme_path)
         except ValueError:
-            return message.channel.send("Das Meme kenne ich gar nicht.")
+            continue
         else:
             del memes[tag][wrong_meme_index]
+            break
+    else:
+        return message.channel.send("Das Meme kenne ich gar nicht.")
     save_obj(memes, save_file_path)
     msg = "Ich habe das Meme aus meiner Sammlung entfernt"
     return message.channel.send(msg)
@@ -169,8 +194,13 @@ def rate_meme(message):
     """
     date = datetime.today().date()
     meme_rating_path = join(OBJS, "meme_rating.pkl")
+    members_path = join(OBJS, "members.pkl")
     meme = load_obj(join(OBJS, "recent_memes.pkl"))[-1]
     meme_ratings = load_obj(meme_rating_path)
+    members = load_obj(members_path)
+    if meme in members[message.author.id]["rated_memes"]:
+        return message.channel.send("Das Meme hast du bereit bewertet.")
+
     rating = _find_rating(message)
     if meme in meme_ratings.keys():
         ratings_by_day = meme_ratings[meme]
@@ -182,6 +212,8 @@ def rate_meme(message):
         meme_ratings[meme][date] += rating
     else:
         meme_ratings[meme][date] = rating
+    members[message.author.id]["rated_memes"].append(meme)
+    save_obj(members, members_path)
     save_obj(meme_ratings, meme_rating_path)
     return message.channel.send("Ich habe deine Wertung von {} aufgenommen.".format(rating))
 

@@ -2,14 +2,17 @@
 import discord
 from os.path import join
 
+from gauss._utils import load_obj, save_obj
 from gauss import brain
 from gauss.parse import to_sympy
 
-VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht"]
+VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht", "top-memes"]
 GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey", "Ni hao", "privjet",
                      "Konnichiwa", "Bonjour", "привет", "こんいちわ", "こんにちは",
                      "Это отлично!"]
 PREVIEWS = join(__file__[:-15], '_previews')
+OBJS = join(__file__.split("_coordinator.py")[0], "_obj")
+
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 
@@ -51,6 +54,15 @@ async def do_task(bot, message):
     """
     if "gauss" not in message.content.lower():
         return
+
+    members_path = join(OBJS, "members.pkl")
+    members = load_obj(members_path)
+    if message.author.id not in members.keys():
+        greeting = "Hi! Du kannst dir mit dem Befehl set greeting" \
+                   " eine persönliche Begrüßung einstellen."
+        members[message.author.id] = {"greeting": greeting,
+                                      "rated_memes": []}
+        save_obj(members, members_path)
 
     if "help" in message.content:
         await brain.subroutines.show_help(message)

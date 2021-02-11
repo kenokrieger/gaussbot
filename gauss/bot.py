@@ -32,13 +32,6 @@ class GaussBot(discord.Client):
         :param message: A discord text message.
         :type message: :class:`discord.message.Message`
         """
-        with open('discord_IDs.txt', 'a') as f:
-            try:
-                f.write("{}:{}\n".format(message.author.name,
-                                         message.author.id))
-            except UnicodeEncodeError:
-                pass
-
         if not is_valid(message):
             return
         tasks = do_task(self, message)
