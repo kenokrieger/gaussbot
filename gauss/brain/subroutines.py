@@ -9,18 +9,24 @@ from gauss._utils import save_obj, load_obj
 
 import discord
 import codecs
-from datetime import datetime
-import time
 
 PREVIEWS = join(__file__.split("brain")[0], '_previews')
 OBJS = join(__file__.split("brain")[0], "_obj")
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
-HELP = join(__file__.split("brain")[0], "_help/commands.txt")
+HELP = join(__file__.split("brain")[0], "_help")
 
 
 def show_help(message):
     """Sends a _help message"""
-    with codecs.open(HELP, 'r', "utf-8") as f:
+    if "math" in message.content:
+        file = "maths.txt"
+    elif "meme" in message.content:
+        file = "memes.txt"
+    elif "utils" in message.content:
+        file = "utils.txt"
+    else:
+        file = "general.txt"
+    with codecs.open(join(HELP, file), 'r', "utf-8") as f:
         msg = f.read()
     return message.channel.send(msg)
 

@@ -1,4 +1,3 @@
-Gauss reagiert auf Nachrichten, die mit *gauss* beginnen.
 Mögliche Befehle:
 
 - **integrate** <expr> *from* <optional> *to* <optional> d<optional>
@@ -29,29 +28,3 @@ Mögliche Befehle:
 
     Berechnet den gegebenen Ausdruck numerisch. Dabei sind die meisten
     Naturkonstanten automatisch bekannt.
-
-- **show** <latex>
-
-    Stellt den latex code gerendert dar.
-
-- **set greeting** <greeting>
-
-    Ermöglicht das Einstellen einer persönlichen Begrüßung <greeting>
-
-- **add meme** <meme-url.com/meme.jpg>
-
-    Fügt ein Meme zur Sammlung hinzu.
-
-- **send <optional> meme**
-
-    Sendet ein zufälliges Meme aus der Sammlung. Mit der Option <optional>
-    kann ein Tag ausgewählt werden, um bestimmte Memes zu zeigen.
-
-- **set meme tag** <tag>
-
-    Fügt dem zuletzt gesendeten Meme ein Tag hinzu.
-
-- **set status** <status>
-
-    Mit 'set status' kann man auswählen welcher Status bei Gauss, in der Form
-    'gauss spielt <status>', angezeigt wird.

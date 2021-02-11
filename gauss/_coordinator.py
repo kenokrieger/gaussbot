@@ -54,7 +54,11 @@ async def do_task(bot, message):
 
     if "help" in message.content:
         await brain.subroutines.show_help(message)
-    elif "add meme" in message.content:
+    elif "rate meme" in message.content:
+        await brain.memes.rate_meme(message)
+    elif "meme report" in message.content:
+        await brain.memes.meme_report(message)
+    elif "meme" in message.content and "add" in message.content:
         await brain.memes.add_meme(message)
     elif "remove meme" in message.content:
         await brain.memes.remove_meme(message)

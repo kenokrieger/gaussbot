@@ -1,0 +1,7 @@
+Gauss reagiert auf Nachrichten, die mit *gauss* beginnen.
+Für Informationen zu den einzelnen Befehlen, benutze die *help*
+Funktion mit einem Argument:
+
+- **gauss help** <thema>
+
+    Mögliche Argumente sind *math*, *memes*, *utils*.

@@ -1,0 +1,14 @@
+Mögliche Befehle:
+
+- **show** <latex>
+
+    Stellt den latex code gerendert dar.
+
+- **set greeting** <greeting>
+
+    Ermöglicht das Einstellen einer persönlichen Begrüßung <greeting>
+
+- **set status** <status>
+
+    Mit 'set status' kann man auswählen welcher Status bei Gauss, in der Form
+    'gauss spielt <status>', angezeigt wird.
