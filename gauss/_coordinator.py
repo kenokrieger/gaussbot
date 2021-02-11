@@ -61,7 +61,8 @@ async def do_task(bot, message):
         greeting = "Hi! Du kannst dir mit dem Befehl set greeting" \
                    " eine persönliche Begrüßung einstellen."
         members[message.author.id] = {"greeting": greeting,
-                                      "rated_memes": []}
+                                      "rated_memes": {},
+                                      "recent_memes": []}
         save_obj(members, members_path)
 
     if "help" in message.content:

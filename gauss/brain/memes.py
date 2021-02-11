@@ -33,11 +33,24 @@ class Meme:
     def get_url(self):
         return self.url
 
+    def get_name(self):
+        return self.name
+
     def get_rating(self):
         return self.rating
 
-    def set_rating(self):
+    def rate(self, rating):
+        """
+        Adds a new rating to the meme.
 
+        :param rating: A rating between 0 and 5
+        :type rating: int
+        """
+        date = datetime.today().date()
+        if date in self.rating.keys():
+            self.rating[date] += rating
+        else:
+            self.rating[date] = rating
 
 
 def send_meme(message):
@@ -50,21 +63,32 @@ def send_meme(message):
     """
     tag = _find_meme_tag(message, "send")
     memes = load_obj(join(OBJS, "memes.pkl"))
-    recent_memes = load_obj(join(OBJS, "recent_memes.pkl"))
+    members = load_obj(join(OBJS, "members.pkl"))
+    recent_memes = members[message.author.id]["recent_memes"]
 
+    if tag == "last":
+        if recent_memes:
+            meme = recent_memes[-1]
+            return message.channel.send(meme)
+        else:
+            return message.channel.send("Ich glaube nicht, dass ich dir schon ein Meme geschickt habe.")
     if tag in memes.keys():
-        meme = _find_fresh_meme(memes[tag], recent_memes)
+        meme = _find_fresh_meme(memes[tag], message, members, recent_memes)
         return message.channel.send(meme)
     else:
         return message.channel.send("Ich konnte keine {} Memes finden.".format(tag))
 
 
-def _find_fresh_meme(memes, recent_memes):
+def _find_fresh_meme(memes, message, members, recent_memes):
     """
     Finds a fresh meme that is not in the list of the last 10 displayed memes.
 
     :param memes: A list of memes to choose from
     :type memes: list
+    :param message: A discord text message to find out the authors id.
+    :type message: :class:`discord.message.Message`
+    :param members: All the members that wrote a message to gauss.
+    :type members: dict
     :param recent_memes: The recent 10 memes.
     :type recent_memes: list
     :return: The url of a fresh meme.
@@ -73,25 +97,30 @@ def _find_fresh_meme(memes, recent_memes):
     meme = memes[randint(0, len(memes) - 1)]
     if meme in recent_memes:
         if len(memes) > 10:
-            return _find_fresh_meme(memes, recent_memes)
+            return _find_fresh_meme(memes, message, members, recent_memes)
         else:
             return meme
     else:
-        _add_to_recent_memes(meme, recent_memes)
+        _add_to_recent_memes(meme, message, members, recent_memes)
         return meme
 
 
-def _add_to_recent_memes(meme, recent_memes):
+def _add_to_recent_memes(meme, message, members, recent_memes):
     """
     Adds a meme to the recently displayed memes.
 
     :param meme: The url of the meme.
     :type meme: str
+    :param message: A discord text message to find out the authors id.
+    :type message: :class:`discord.message.Message`
+    :param members: All the members that wrote a message to gauss.
+    :type members: dict
     :param recent_memes: List of the last 10 memes.
     :type recent_memes: list
     """
     recent_memes = recent_memes[1:] + [meme]
-    save_obj(recent_memes, join(OBJS, "recent_memes.pkl"))
+    members[message.author.id]["recent_memes"] = recent_memes
+    save_obj(members, join(OBJS, "members.pkl"))
 
 
 def add_meme(message):
@@ -160,7 +189,7 @@ def set_meme_tag(message):
     meme_path = join(OBJS, "memes.pkl")
     tag = message.content.lower().split("set meme tag")[1].strip()
     memes = load_obj(meme_path)
-    last_meme = load_obj(join(OBJS, "recent_memes.pkl"))[-1]
+    last_meme = load_obj(join(OBJS, "members.pkl"))[message.author.id]["recent_memes"][-1]
     response = "Ich habe für das letzte Meme das Tag \'{}\' hinzugefügt.".format(tag)
     if tag not in memes.keys():
         memes[tag] = [last_meme]
@@ -195,24 +224,30 @@ def rate_meme(message):
     date = datetime.today().date()
     meme_rating_path = join(OBJS, "meme_rating.pkl")
     members_path = join(OBJS, "members.pkl")
-    meme = load_obj(join(OBJS, "recent_memes.pkl"))[-1]
     meme_ratings = load_obj(meme_rating_path)
     members = load_obj(members_path)
-    if meme in members[message.author.id]["rated_memes"]:
-        return message.channel.send("Das Meme hast du bereit bewertet.")
+    meme = members[message.author.id]["recent_memes.pkl"][-1]
+
+    if meme in members[message.author.id]["rated_memes"].keys():
+        this_week = _this_week(date)
+        if this_week[0] <= members[message.author.id]["rated_memes"][meme] <= this_week[1]:
+            return message.channel.send("Das Meme hast du bereits bewertet.")
 
     rating = _find_rating(message)
     if meme in meme_ratings.keys():
         ratings_by_day = meme_ratings[meme]
     else:
-        ratings_by_day = {date: 0}
+        ratings_by_day = {date: [0, 0]}
         meme_ratings[meme] = ratings_by_day
 
     if date in ratings_by_day.keys():
-        meme_ratings[meme][date] += rating
+        meme_ratings[meme][date][0] += rating
+        meme_ratings[meme][date][1] += 1
     else:
-        meme_ratings[meme][date] = rating
-    members[message.author.id]["rated_memes"].append(meme)
+        meme_ratings[meme][date][0] = rating
+        meme_ratings[meme][date][1] = 1
+
+    members[message.author.id]["rated_memes"][meme] = date
     save_obj(members, members_path)
     save_obj(meme_ratings, meme_rating_path)
     return message.channel.send("Ich habe deine Wertung von {} aufgenommen.".format(rating))
@@ -265,22 +300,33 @@ async def meme_report(message):
     time_interval = _find_date_interval(timeframe)
 
     top_memes = [("", 0)] * 5
+    total_votes = 0
     for meme in meme_ratings.keys():
         total_rating = 0
+        times_rated = 0
         for rate_date in meme_ratings[meme].keys():
             if time_interval[0].date() <= rate_date <= time_interval[1].date():
-                total_rating += meme_ratings[meme][rate_date]
+                total_rating += meme_ratings[meme][rate_date][0]
+                times_rated += meme_ratings[meme][rate_date][1]
+        total_votes += times_rated
         for idx, top_meme in enumerate(top_memes):
-            if total_rating > top_meme[1]:
-                top_memes[idx] = (meme, total_rating)
+            if not times_rated:
+                break
+            score = total_rating / times_rated
+            if score > top_meme[1]:
+                if idx + 1 < 5:
+                    top_memes[idx + 1] = top_memes[idx]
+                top_memes[idx] = (meme, score)
                 break
 
-    await message.channel.send("Hier sind die Top Memes {} !".format(timeframe.capitalize()))
+    msg = "Hier sind die Top Memes {} !\ninsgesamt wurde {}mal gevoted"
+    await message.channel.send(msg.format(timeframe.capitalize(), total_votes))
 
     for idx, top_meme in enumerate(top_memes):
         if not top_meme[0]:
+            await message.channel.send("Es gab nicht genügend Votes.")
             break
-        await message.channel.send("Platz {} mit einer Gesamtwertung von {}\n".format(idx + 1, top_meme[1]))
+        await message.channel.send("Platz {} mit einer Gesamtwertung von {:.2f}\n".format(idx + 1, top_meme[1]))
         await message.channel.send(top_meme[0])
 
 
@@ -353,8 +399,3 @@ def _this_year(today):
     first_day = datetime(today.year, 1, 1)
     last_day = datetime(today.year, 12, 31)
     return first_day, last_day
-
-
-
-
-
