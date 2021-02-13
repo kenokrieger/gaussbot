@@ -1,5 +1,9 @@
 Mögliche Befehle:
 
+- **-r**
+
+    Wiederholt den letzten Befehl.
+
 - **show** <latex>
 
     Stellt den latex code gerendert dar.

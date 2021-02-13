@@ -62,11 +62,14 @@ async def do_task(bot, message):
                    " eine persönliche Begrüßung einstellen."
         members[message.author.id] = {"greeting": greeting,
                                       "rated_memes": {},
-                                      "recent_memes": []}
-        save_obj(members, members_path)
+                                      "recent_memes": [],
+                                      "last_task": ""}
 
     if "help" in message.content:
         await brain.subroutines.show_help(message)
+    elif message.content == "gauss -r":
+        await _coordinate_last_task(members, bot, message)
+        return
     elif "rate meme" in message.content:
         await brain.memes.rate_meme(message)
     elif "meme report" in message.content:
@@ -101,6 +104,9 @@ async def do_task(bot, message):
         await brain.greetings.greet(message)
     else:
         await message.channel.send(NO_TASK_FOUND_ERRMSG)
+
+    members[message.author.id]["last_task"] = message.content
+    save_obj(members, members_path)
 
 
 async def _coordinate_differentiation(bot, message):
@@ -155,6 +161,21 @@ async def _coordinate_integration(bot, message):
     await message.channel.send(
         'TRIVIAL!',
         file=discord.File(VIEW_OUTPUT))
+
+
+async def _coordinate_last_task(members, bot, message):
+    """
+    Repeats the last task that was performed.
+
+    :param members: User info.
+    :param bot: The discord bot.
+    :param message: A discord text message.
+    """
+    if "last_task" in members[message.author.id]:
+        message.content = members[message.author.id]["last_task"]
+        await do_task(bot, message)
+    else:
+        await message.channel.send("Du hast noch nicht mit mir gesprochen")
 
 
 def check(message):

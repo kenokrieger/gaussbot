@@ -2,13 +2,13 @@
 from os.path import join
 
 from random import randint
-from datetime import datetime, timedelta
-import calendar
+from datetime import datetime
 
 import discord
 
-from gauss._utils import load_obj, save_obj
+from gauss._utils import load_obj, save_obj, find_date_interval
 from gauss._physicists import PHYSICISTS
+from gauss.webscraping.reddit import get_meme
 
 OBJS = join(__file__.split("brain")[0], "_obj")
 ADMINS = [PHYSICISTS["KENO"]]
@@ -65,6 +65,11 @@ def send_meme(message):
     memes = load_obj(join(OBJS, "memes.pkl"))
     members = load_obj(join(OBJS, "members.pkl"))
     recent_memes = members[message.author.id]["recent_memes"]
+
+    if "fresh" in tag:
+        memes = [get_meme(tag.replace("fresh", "").strip())]
+        meme = _find_fresh_meme(memes, message, members, recent_memes)
+        return message.channel.send(meme)
 
     if tag == "last":
         if recent_memes:
@@ -133,20 +138,45 @@ def add_meme(message):
     """
     tag = _find_meme_tag(message, "add")
     meme_file_path = join(OBJS, "memes.pkl")
-    recent_memes = load_obj(join(OBJS, "recent_memes.pkl"))
-    memes = load_obj(meme_file_path)
-    meme_path = message.content.split("add meme")[1].strip()
-    if meme_path not in memes.values():
-        if tag not in memes.keys():
-            memes[tag] = [meme_path]
-        else:
-            memes[tag].append(meme_path)
-        save_obj(memes, meme_file_path)
-        _add_to_recent_memes(meme_path, recent_memes)
-        msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
+    members = load_obj(join(OBJS, "members.pkl"))
+    recent_memes = members[message.author.id]["recent_memes"]
+
+    if tag == "last":
+        tag = message.content.split("meme")[1].replace("to", "")
+        if not tag:
+            tag = "no-tag"
+        meme_url = recent_memes[-1]
     else:
-        msg = "Das kenne ich schon."
-    return message.channel.send(msg + meme_path)
+        meme_url = message.content.split("meme")[1].strip()
+
+    msg = _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag)
+    return message.channel.send(msg + meme_url)
+
+
+def _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag):
+    """
+    Adds a meme to the collection.
+
+    :param message: A discord text message.
+    :param members: User information.
+    :param meme_file_path: Url of the meme.
+    :param meme_url: The url of the meme.
+    :param recent_memes: The recent memes of the user.
+    :param tag: A tag for the meme.
+    :return:
+    """
+    memes = load_obj(meme_file_path)
+    msg = "Das kenne ich schon."
+    if tag not in memes.keys():
+        memes[tag] = [meme_url]
+    elif meme_url not in memes[tag]:
+        memes[tag].append(meme_url)
+    else:
+        return msg
+    save_obj(memes, meme_file_path)
+    _add_to_recent_memes(meme_url, message, members, recent_memes)
+    msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
+    return msg
 
 
 def remove_meme(message):
@@ -226,12 +256,12 @@ def rate_meme(message):
     members_path = join(OBJS, "members.pkl")
     meme_ratings = load_obj(meme_rating_path)
     members = load_obj(members_path)
-    meme = members[message.author.id]["recent_memes.pkl"][-1]
+    meme = members[message.author.id]["recent_memes"][-1]
 
     if meme in members[message.author.id]["rated_memes"].keys():
         this_week = _this_week(date)
         if this_week[0] <= members[message.author.id]["rated_memes"][meme] <= this_week[1]:
-            return message.channel.send("Das Meme hast du bereits bewertet.")
+            return message.channel.send("Das Meme hast du diese Woche bereits bewertet.")
 
     rating = _find_rating(message)
     if meme in meme_ratings.keys():
@@ -244,8 +274,7 @@ def rate_meme(message):
         meme_ratings[meme][date][0] += rating
         meme_ratings[meme][date][1] += 1
     else:
-        meme_ratings[meme][date][0] = rating
-        meme_ratings[meme][date][1] = 1
+        meme_ratings[meme][date] = [rating, 1]
 
     members[message.author.id]["rated_memes"][meme] = date
     save_obj(members, members_path)
@@ -297,7 +326,7 @@ async def meme_report(message):
 
     meme_ratings = load_obj(join(OBJS, "meme_rating.pkl"))
     timeframe = message.content.split("meme report")[1].strip()
-    time_interval = _find_date_interval(timeframe)
+    time_interval = find_date_interval(timeframe)
 
     top_memes = [("", 0)] * 5
     total_votes = 0
@@ -328,74 +357,3 @@ async def meme_report(message):
             break
         await message.channel.send("Platz {} mit einer Gesamtwertung von {:.2f}\n".format(idx + 1, top_meme[1]))
         await message.channel.send(top_meme[0])
-
-
-def _find_date_interval(timeframe):
-    """
-    Finds a date interval of either this or last week, month or year.
-
-    :param timeframe: The desired timeframe.
-    :type timeframe: str
-    :return: The date interval.
-    :rtype: tuple
-    """
-    today = datetime.today()
-
-    if "week" in timeframe:
-        if "last" in timeframe:
-            today -= timedelta(days=7)
-        return _this_week(today)
-    elif "month" in timeframe:
-        if "last" in timeframe:
-            today = datetime(today.year, today.month - 1, today.day)
-        return _this_month(today)
-    elif "year" in timeframe:
-        if "last" in timeframe:
-            today -= timedelta(days=366)
-        return _this_year(today)
-
-
-def _this_week(today):
-    """
-    Finds the first and last day of this week.
-
-    :param today: The date of today.
-    :return: The first and last day of the week
-    :rtype: tuple
-    """
-    monday = today
-    for diff in range(7):
-        date_to_check = today - timedelta(days=diff)
-        if not date_to_check.weekday():
-            monday = date_to_check
-            break
-    sunday = (monday + timedelta(days=6))
-    return monday, sunday
-
-
-def _this_month(today):
-    """
-    Finds the first and last day of this month.
-
-    :param today: The date of today.
-    :return: The first and last day of this month.
-    :rtype: tuple
-    """
-    first_day_this_month = 1
-    last_day_this_month = calendar.monthrange(today.year, today.month)[1]
-    first_day = datetime(today.year, today.month, first_day_this_month)
-    last_day = datetime(today.year, today.month, last_day_this_month)
-    return first_day, last_day
-
-
-def _this_year(today):
-    """
-    Finds the first and last day of this year.
-
-    :param today: The date of today.
-    :return: The first and last day of this year.
-    :rtype: tuple
-    """
-    first_day = datetime(today.year, 1, 1)
-    last_day = datetime(today.year, 12, 31)
-    return first_day, last_day

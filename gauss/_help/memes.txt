@@ -3,12 +3,17 @@ Mögliche Befehle:
 - **add** <optional> **meme** <meme-url.com/meme.jpg>
 
     Fügt ein Meme zur Sammlung hinzu. Mit <optional> kann das Meme mit einem
-    Tag versehen werden.
+    Tag versehen werden. 'last' ist dabei ein reserviertes tag.
 
-- **send** <optional> **meme**
+- **send** <optional: tag> **meme**
 
-    Sendet ein zufälliges Meme aus der Sammlung. Mit der Option <optional>
-    kann ein Tag ausgewählt werden, um bestimmte Memes zu zeigen.
+    Sendet ein zufälliges Meme aus der Sammlung. Mit der Option <tag>
+    kann ein Tag ausgewählt werden, um bestimmte Memes zu zeigen. 'fresh'
+    ist dabei ein reserviertes tag (s.u.).
+    Mit dem Vorsatz 'fresh' in <tag> wird ein Meme, welches nicht aus der
+    statischen Sammlung stammt gezeigt. Dieses kann anschließend mit dem Befehl
+    **gauss add last meme** *to* <optional: tag> zur statischen Sammlung
+    hinzugefügt werden.
 
 - **rate meme** <rating>
 
