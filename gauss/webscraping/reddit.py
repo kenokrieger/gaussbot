@@ -1,6 +1,6 @@
 from os import getenv
 from dotenv import load_dotenv
-import praw
+from praw import Reddit
 
 from prawcore.exceptions import NotFound
 load_dotenv()
@@ -13,11 +13,11 @@ def get_meme(tag):
     :param tag: The genre of the meme.
     :return: None if no meme was found else the url to the meme.
     """
-    reddit = praw.Reddit(client_id=getenv("CLIENT_ID"),
-                         client_secret=getenv("CLIENT_SECRET"),
-                         password=getenv("CLIENT_PASSWORD"),
-                         user_agent=getenv("USER_AGENT"),
-                         username=getenv("USERNAME"))
+    reddit = Reddit(client_id=getenv("CLIENT_ID"),
+                    client_secret=getenv("CLIENT_SECRET"),
+                    password=getenv("CLIENT_PASSWORD"),
+                    user_agent=getenv("USER_AGENT"),
+                    username=getenv("USERNAME"))
 
     try:
         subreddit = reddit.subreddit(tag + "memes")

@@ -13,7 +13,7 @@ def save_obj(obj, filename):
     :param filename: The name of the file to save the object to.
     :type filename: str or path
     """
-    with open(filename, 'wb') as f:
+    with open(filename, 'wb+') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
 

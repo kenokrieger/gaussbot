@@ -23,7 +23,7 @@ class GaussBot(discord.Client):
         guild = discord.utils.get(self.guilds, name=GUILD)
         print('{} is connected to {}'.format(self.user, guild.name))
         await self.change_presence(activity=discord.Game(
-            name="Integral solving 101"))
+            name="maintenance"))
 
     async def on_message(self, message):
         """

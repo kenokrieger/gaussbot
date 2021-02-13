@@ -5,6 +5,7 @@ from os.path import join
 from gauss._utils import load_obj, save_obj
 from gauss import brain
 from gauss.parse import to_sympy
+from gauss.brain.memes import Meme
 
 VALID_CHANNELS = ["gauss", "troll", "Allgemein", "unterricht", "top-memes"]
 GREETING_KEYWORDS = ["hi", "moin", "hallo", "tag", "hey", "Ni hao", "privjet",
@@ -62,8 +63,9 @@ async def do_task(bot, message):
                    " eine persönliche Begrüßung einstellen."
         members[message.author.id] = {"greeting": greeting,
                                       "rated_memes": {},
-                                      "recent_memes": [],
+                                      "recent_memes": [Meme("", "0")] * 30,
                                       "last_task": ""}
+        save_obj(members, members_path)
 
     if "help" in message.content:
         await brain.subroutines.show_help(message)
@@ -105,6 +107,7 @@ async def do_task(bot, message):
     else:
         await message.channel.send(NO_TASK_FOUND_ERRMSG)
 
+    members = load_obj(members_path)
     members[message.author.id]["last_task"] = message.content
     save_obj(members, members_path)
 
