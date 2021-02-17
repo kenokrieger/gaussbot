@@ -10,6 +10,8 @@ Mögliche Befehle:
     Sendet ein zufälliges Meme aus der Sammlung. Mit der Option <tag>
     kann ein Tag ausgewählt werden, um bestimmte Memes zu zeigen. 'fresh'
     ist dabei ein reserviertes tag (s.u.).
+    Gauss vermeidet dabei, wenn möglich, eines der 30 zuletzt gesehenen oder
+    bewerteten Memes zu versenden.
     Mit dem Vorsatz 'fresh' in <tag> wird ein Meme, welches nicht aus der
     statischen Sammlung stammt gezeigt. Dieses kann anschließend mit dem Befehl
     **gauss add last meme** *to* <optional: tag> zur statischen Sammlung

@@ -28,21 +28,22 @@ def load_obj(filename):
         return pickle.load(f)
 
 
-def find_date_interval(timeframe):
+def get_year_and_week(timeframe):
     """
     Finds a date interval of either this or last week, month or year.
 
     :param timeframe: The desired timeframe.
     :type timeframe: str
-    :return: The date interval.
+    :return: The year and weeks of the time interval
     :rtype: tuple
     """
     today = datetime.today()
+    year, week, day = today.isocalendar()
 
     if "week" in timeframe:
         if "last" in timeframe:
-            today -= timedelta(days=7)
-        return _this_week(today)
+            return year, week - 1
+        return year, week
     elif "month" in timeframe:
         if "last" in timeframe:
             today = datetime(today.year, today.month - 1, today.day)
