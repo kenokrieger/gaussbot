@@ -17,8 +17,30 @@ OBJS = join(__file__.split("_coordinator.py")[0], "_obj")
 VIEW_INPUT = join(PREVIEWS, 'input.png')
 VIEW_OUTPUT = join(PREVIEWS, 'output.png')
 
-GAUSSIAN_INTEGRAL_MSG = "Also wenn du das nicht kennst, kann ich dir auch nicht helfen."
+GAUSSIAN_INTEGRAL_MSG = "Willst du mich auf den Arm nehmen?"
 NO_TASK_FOUND_ERRMSG = "Falls du etwas von mir wolltest habe ich es nicht verstanden"
+
+TASKS = {
+    # 'command': (function, number of arguments)
+    "help": (brain.subroutines.show_help, 1),
+    "rate meme": (brain.memes.rate_meme, 1),
+    "meme report": (brain.memes.meme_report, 1),
+    "add meme": (brain.memes.add_meme, 1),
+    "remove meme": (brain.memes.remove_meme, 1),
+    "set meme tag": (brain.memes.set_meme_tag, 1),
+    "set greeting": (brain.greetings.set_greeting, 1),
+    "declare var": (brain.subroutines.declare_custom_variable, 1),
+    "calc": (brain.subroutines.do_calculation, 1),
+    "show": (brain.subroutines.show_latex, 1),
+    "send meme": (brain.memes.send_meme, 1),
+    "send nudes": (brain.memes.send_nudes, 1),
+    "rip": (brain.memes.pay_respect, 1),
+    "r.i.p.": (brain.memes.pay_respect, 1),
+    "set status": (brain.subroutines.set_status, 2)
+}
+
+for greeting_keyword in GREETING_KEYWORDS:
+    TASKS[greeting_keyword] = brain.greetings.greet
 
 
 def is_valid(message):
@@ -31,11 +53,11 @@ def is_valid(message):
     :return: `True` if the message is valid, `False` otherwise.
     :rtype: bool
     """
-    if message.author.bot:
-        return False
-    elif isinstance(message.channel, discord.channel.DMChannel):
-        return True
-    elif message.channel.name in VALID_CHANNELS:
+    message_in_dm_channel = isinstance(message.channel, discord.channel.DMChannel)
+    message_in_valid_channel = message.channel.name in VALID_CHANNELS
+    is_bot = message.author.bot
+
+    if (message_in_dm_channel or message_in_valid_channel) and not is_bot:
         return True
     else:
         return False
@@ -67,45 +89,25 @@ async def do_task(bot, message):
                                       "last_task": ""}
         save_obj(members, members_path)
 
-    if "help" in message.content:
-        await brain.subroutines.show_help(message)
-    elif message.content == "gauss -r":
+    for key in TASKS:
+        if key in message.content.lower():
+            number_of_expected_args = TASKS[key][1]
+            if number_of_expected_args == 1:
+                await TASKS[key](message)
+            elif number_of_expected_args == 2:
+                await TASKS[key](bot, message)
+
+    # the more complex tasks can't be mapped with a dictionary
+    if message.content == "gauss -r":
         await _coordinate_last_task(members, bot, message)
         return
-    elif "rate meme" in message.content:
-        await brain.memes.rate_meme(message)
-    elif "meme report" in message.content:
-        await brain.memes.meme_report(message)
-    elif "meme" in message.content and "add" in message.content:
-        await brain.memes.add_meme(message)
-    elif "remove meme" in message.content:
-        await brain.memes.remove_meme(message)
-    elif "set meme tag" in message.content:
-        await brain.memes.set_meme_tag(message)
-    elif "set greeting" in message.content:
-        await brain.greetings.set_greeting(message)
-    elif "declare var" in message.content:
-        await brain.subroutines.declare_custom_variable(message)
     elif "integrate" in message.content:
         await _coordinate_integration(bot, message)
     elif "diff" in message.content:
         await _coordinate_differentiation(bot, message)
-    elif "calc" in message.content:
-        await brain.subroutines.do_calculation(message)
-    elif "show" in message.content:
-        await brain.subroutines.show_latex(message)
-    elif "send" in message.content and "meme" in message.content:
-        await brain.memes.send_meme(message)
-    elif "send nudes" in message.content:
-        await brain.memes.send_nudes(message)
-    elif message.content.lower() in ['rip', 'r.i.p.']:
-        await brain.memes.pay_respect(message)
-    elif "set status" in message.content.lower():
-        await brain.subroutines.set_status(bot, message)
-    elif any(greeting_keyword in message.content.lower() for greeting_keyword in GREETING_KEYWORDS):
-        await brain.greetings.greet(message)
     else:
         await message.channel.send(NO_TASK_FOUND_ERRMSG)
+        return
 
     members = load_obj(members_path)
     members[message.author.id]["last_task"] = message.content
@@ -183,7 +185,3 @@ async def _coordinate_last_task(members, bot, message):
 
 def check(message):
     return not message.author.bot and len(message.content) < 10
-
-
-def meme_check(message):
-    return "star" in message.content.lower()

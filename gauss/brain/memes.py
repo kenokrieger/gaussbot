@@ -179,18 +179,18 @@ def add_meme(message):
     recent_memes = members[message.author.id]["recent_memes"]
 
     if tag == "last":
-        tag = message.content.split("meme")[1].replace("to", "").strip()
+        tag = message.content.split("to")[-1].strip()
         if not tag:
             tag = "no-tag"
         meme_url = recent_memes[-1].get_url()
     else:
         meme_url = message.content.split("meme")[1].strip()
 
-    msg = _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag)
+    msg = _add_meme(message, members, meme_file_path, meme_url, tag)
     return message.channel.send(msg + meme_url)
 
 
-def _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag):
+def _add_meme(message, members, meme_file_path, meme_url, tag):
     """
     Adds a meme to the collection.
 
@@ -198,7 +198,6 @@ def _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag):
     :param members: User information.
     :param meme_file_path: Url of the meme.
     :param meme_url: The url of the meme.
-    :param recent_memes: The recent memes of the user.
     :param tag: A tag for the meme.
     :return:
     """
@@ -212,7 +211,7 @@ def _add_meme(message, members, meme_file_path, meme_url, recent_memes, tag):
     else:
         return msg
     save_obj(memes, meme_file_path)
-    _add_to_recent_memes(new_meme, message, members, recent_memes)
+    _add_to_recent_memes(new_meme, message, members)
     msg = "Ich habe dieses Meme in meine Sammlung aufgenommen\n"
     return msg
 
@@ -367,6 +366,11 @@ async def meme_report(message):
         return message.channel.send(NO_ADMIN_ERRMSG)
     memes = load_obj(join(OBJS, "memes.pkl"))
 
+    if "exclude=" in message.content:
+        exclude_memes = [m.strip() for m in message.content.split("=")[1].split(";")]
+    else:
+        exclude_memes = []
+
     top_memes = [("", 0)] * 5
     total_votes = 0
 
@@ -374,7 +378,7 @@ async def meme_report(message):
         for meme in memes[tag]:
             votes = meme.get_rating(average=False)[1]
             total_votes += votes
-            if votes < 2:
+            if votes < 2 or meme.get_url() in exclude_memes:
                 continue
 
             avg_rating = meme.get_rating()

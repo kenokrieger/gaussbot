@@ -4,3 +4,4 @@ __pycache__
 gauss/_previews
 gauss/_physicists.py
 docs/build/
+gauss/_obj/*
