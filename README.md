@@ -7,9 +7,8 @@ was a German mathematician and physicist who made significant
 contributions to many fields in mathematics and science 
 (taken from <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss">wikipedia</a>).
 
-The gauss discord bot is designed to help with mathematical
-inquiries of all sorts. He will help you to solve integrals and 
-to differentiate and probably even more in the future.
+The gauss discord bot was initially designed to help with mathematical
+inquiries of all sorts but is evolving into a meme machine.
 
 ## Requirements
 
